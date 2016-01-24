@@ -12,7 +12,18 @@
 
     <modules>
         <module>midguitar-model</module>
+        <module>midguitar-swing</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>midguitar-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
 
