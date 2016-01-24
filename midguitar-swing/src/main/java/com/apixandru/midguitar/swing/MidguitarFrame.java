@@ -7,7 +7,8 @@ import com.apixandru.midguitar.model.MidiHandler;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.function.BiConsumer;
 
 /**
  * @author Alexandru-Constantin Bledea
@@ -16,15 +17,19 @@ import java.util.Collections;
 public final class MidguitarFrame {
 
     public static void main(String[] args) throws MidiUnavailableException {
-        final JFrame midguitar = new JFrame("Midguitar");
+        final JFrame midguitar = new JFrame();
+        BiConsumer<Integer, Integer> stats = (c, w) -> midguitar.setTitle(String.format("Correct %3s Wrong %3d", c, w));
+        stats.accept(0, 0);
         midguitar.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         midguitar.getContentPane().setLayout(new GridBagLayout());
-        midguitar.add(new MidguitarPanel());
+        final MidguitarPanel panel = new MidguitarPanel(stats);
+        midguitar.add(panel);
         midguitar.pack();
         midguitar.setLocationRelativeTo(null);
         midguitar.setVisible(true);
 
-        MidiHandler.connect(MidiDevices.getInputDevices().get(0), Collections.singletonList(MidGuitarFactory.newSynthNoteListener()));
+        MidiHandler.connect(MidiDevices.getInputDevices().get(0),
+                Arrays.asList(MidGuitarFactory.newSynthNoteListener(), panel));
     }
 
 }

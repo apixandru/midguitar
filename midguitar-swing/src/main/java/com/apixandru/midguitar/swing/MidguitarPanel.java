@@ -1,5 +1,6 @@
 package com.apixandru.midguitar.swing;
 
+import com.apixandru.midguitar.model.NoteGenerator;
 import com.apixandru.midguitar.model.NoteListener;
 import com.apixandru.midguitar.model.Notes;
 
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.function.BiConsumer;
 
 /**
  * @author Alexandru-Constantin Bledea
@@ -19,7 +21,11 @@ public class MidguitarPanel extends JPanel implements NoteListener {
 
     private static final int DISTANCE_BETWEEN_LINES = 30;
     private static final int DISTANCE_SEMITONE = DISTANCE_BETWEEN_LINES / 2;
-    private static final int DISTANCE_BETWEEN_NOTES = 70;
+    private static final int DISTANCE_BETWEEN_NOTES = 90;
+
+    private final NoteGenerator noteGenerator = new NoteGenerator(49, 76);
+
+    private static final Color COLOR_GRID = new Color(0x77000000, true);
 
     private static final int POS_E2 = 420;
     private static final int NOTE_E2 = 40;
@@ -29,16 +35,22 @@ public class MidguitarPanel extends JPanel implements NoteListener {
 
     private static final int START_Y = 35;
 
+    private final BiConsumer<Integer, Integer> stats;
+
+    private int correct;
+    private int wrong;
+
     private BufferedImage imgClefG;
     private BufferedImage imgWholeNote;
     private BufferedImage imgModSharp;
 
-    private Integer noteExpected = 58;
-    private Integer noteActual = 64;
+    private Integer noteExpected = noteGenerator.nextNote();
+    private Integer noteActual;
 
-    MidguitarPanel() {
+    MidguitarPanel(final BiConsumer<Integer, Integer> stats) {
         setBorder(new LineBorder(Color.BLACK, 2));
-        final int width = 300;
+        this.stats = stats;
+        final int width = 330;
 
         fromX = 20;
         toX = width - fromX;
@@ -80,7 +92,29 @@ public class MidguitarPanel extends JPanel implements NoteListener {
         if (Notes.isSharp(note)) {
             g.drawImage(imgModSharp, x - 29, y - 14, null);
         }
+        final int relationToMainGrid = getRelationToMainGrid(note);
+        if (0 == relationToMainGrid) {
+            return;
+        }
+//        for (int i = 0; i < relationToMainGrid; i++) {
+//            ((Graphics2D) g).setStroke(new BasicStroke(4f));
+//            final Color originalColor = g.getColor();
+//            g.setColor(COLOR_GRID);
+//            g.drawLine(x, y + (imgWholeNote.getHeight() / 2), x + imgWholeNote.getWidth(), y + (imgWholeNote.getHeight() / 2));
+//            g.setColor(originalColor);
+//        }
+    }
 
+    /**
+     * @param note
+     * @return
+     */
+    private int getRelationToMainGrid(final int note) {
+        if (note > 67) {
+//            System.out.println(Notes.getFullNotesInBetween(67, note));
+            return 1;
+        }
+        return 0;
     }
 
     /**
@@ -93,7 +127,7 @@ public class MidguitarPanel extends JPanel implements NoteListener {
         final Stroke originalStroke = g.getStroke();
         g.setStroke(new BasicStroke(4f));
         drawLines(6, 0, g);
-        g.setColor(Color.BLACK);
+        g.setColor(new Color(0x66000000, true));
         drawLines(5, 6, g);
         g.setColor(outOfRangeColor);
         drawLines(3, 11, g);
@@ -129,7 +163,15 @@ public class MidguitarPanel extends JPanel implements NoteListener {
     @Override
     public void noteStart(final int noteNumber) {
         SwingUtilities.invokeLater(() -> {
-            noteActual = noteNumber;
+            if (noteNumber == noteExpected) {
+                noteActual = null;
+                noteExpected = noteGenerator.nextNote();
+                correct++;
+            } else {
+                noteActual = noteNumber;
+                wrong++;
+            }
+            stats.accept(correct, wrong);
             repaint();
         });
     }
