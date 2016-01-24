@@ -1,10 +1,12 @@
 package com.apixandru.midguitar.model;
 
 /**
+ * This class seems overkill, maybe replace it? I'm not sure that all this information is actually needed.
+ *
  * @author Alexandru-Constantin Bledea
  * @since January 23, 2016
  */
-public enum BaseNote {
+enum BaseNote {
 
     C("C"), CS(C),
     D("D"), DS(D),
@@ -45,21 +47,21 @@ public enum BaseNote {
     /**
      * @return sharp
      */
-    public boolean isSharp() {
+    boolean isSharp() {
         return sharp;
     }
 
     /**
      * @return
      */
-    public BaseNote getBaseNote() {
+    BaseNote getBaseNote() {
         return baseNote;
     }
 
     /**
      * @return the value of the note
      */
-    public String getValue() {
+    String getValue() {
         if (isSharp()) {
             return value + '#';
         }

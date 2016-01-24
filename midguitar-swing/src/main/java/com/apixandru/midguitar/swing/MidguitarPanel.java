@@ -1,6 +1,5 @@
 package com.apixandru.midguitar.swing;
 
-import com.apixandru.midguitar.model.BaseNote;
 import com.apixandru.midguitar.model.NoteSource;
 import com.apixandru.midguitar.model.Notes;
 
@@ -75,25 +74,12 @@ public class MidguitarPanel extends JPanel implements NoteSource {
             x += DISTANCE_BETWEEN_NOTES;
         }
 
-        int y = POS_E2 - getFullNotesInBetween(note) * DISTANCE_SEMITONE;
+        int y = POS_E2 - Notes.getFullNotesInBetween(NOTE_E2, note) * DISTANCE_SEMITONE;
         g.drawImage(imgWholeNote, x, y, null);
-        boolean isSharp = Notes.getBaseNote(note).isSharp();
+        boolean isSharp = Notes.isSharp(note);
         if (isSharp) {
             g.drawImage(imgModSharp, x - 29, y - 14, null);
         }
-    }
-
-    private int getFullNotesInBetween(final int note) {
-        int count = 0;
-        BaseNote lastNote = BaseNote.E;
-        for (int i = NOTE_E2; i <= note; i++) {
-            final BaseNote currentNote = Notes.getBaseNote(i);
-            if (currentNote.getBaseNote() != lastNote) {
-                count++;
-            }
-            lastNote = currentNote.getBaseNote();
-        }
-        return count;
     }
 
     /**
