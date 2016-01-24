@@ -1,8 +1,5 @@
 package com.apixandru.midguitar.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Alexandru-Constantin Bledea
  * @since January 23, 2016
