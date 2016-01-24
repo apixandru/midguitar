@@ -1,6 +1,6 @@
 package com.apixandru.midguitar.swing;
 
-import com.apixandru.midguitar.model.NoteSource;
+import com.apixandru.midguitar.model.NoteListener;
 import com.apixandru.midguitar.model.Notes;
 
 import javax.imageio.ImageIO;
@@ -15,7 +15,7 @@ import java.io.InputStream;
  * @author Alexandru-Constantin Bledea
  * @since January 24, 2016
  */
-public class MidguitarPanel extends JPanel implements NoteSource {
+public class MidguitarPanel extends JPanel implements NoteListener {
 
     private static final int DISTANCE_BETWEEN_LINES = 30;
     private static final int DISTANCE_SEMITONE = DISTANCE_BETWEEN_LINES / 2;
