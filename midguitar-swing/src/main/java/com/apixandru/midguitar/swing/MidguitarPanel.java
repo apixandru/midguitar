@@ -76,10 +76,11 @@ public class MidguitarPanel extends JPanel implements NoteListener {
 
         int y = POS_E2 - Notes.getFullNotesInBetween(NOTE_E2, note) * DISTANCE_SEMITONE;
         g.drawImage(imgWholeNote, x, y, null);
-        boolean isSharp = Notes.isSharp(note);
-        if (isSharp) {
+
+        if (Notes.isSharp(note)) {
             g.drawImage(imgModSharp, x - 29, y - 14, null);
         }
+
     }
 
     /**
