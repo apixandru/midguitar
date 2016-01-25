@@ -1,26 +1,22 @@
 package com.apixandru.midguitar.swing;
 
-import com.apixandru.midguitar.model.NoteGenerator;
-import com.apixandru.midguitar.model.NoteListener;
 import com.apixandru.midguitar.model.Notes;
+import com.apixandru.midguitar.model.matcher.NoteMatcherListener;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.function.BiConsumer;
 
 /**
  * @author Alexandru-Constantin Bledea
  * @since January 24, 2016
  */
-public class MidguitarPanel extends JPanel implements NoteListener {
+public class MidguitarPanel extends JPanel implements NoteMatcherListener {
 
     private static final int DISTANCE_BETWEEN_LINES = 30;
     private static final int DISTANCE_SEMITONE = DISTANCE_BETWEEN_LINES / 2;
     private static final int DISTANCE_BETWEEN_NOTES = 90;
-
-    private final NoteGenerator noteGenerator = new NoteGenerator(49, 76);
 
     private static final Color COLOR_GRID = new Color(0x77000000, true);
     private static final BasicStroke STROKE_GRID = new BasicStroke(4f);
@@ -33,8 +29,6 @@ public class MidguitarPanel extends JPanel implements NoteListener {
 
     private static final int START_Y = 35;
 
-    private final BiConsumer<Integer, Integer> stats;
-
     private int correct;
     private int wrong;
 
@@ -42,12 +36,11 @@ public class MidguitarPanel extends JPanel implements NoteListener {
     private BufferedImage imgWholeNote;
     private BufferedImage imgModSharp;
 
-    private Integer noteExpected = noteGenerator.nextNote();
+    private Integer noteExpected;
     private Integer noteActual;
 
-    MidguitarPanel(final BiConsumer<Integer, Integer> stats) {
+    MidguitarPanel() {
         setBorder(new LineBorder(Color.BLACK, 2));
-        this.stats = stats;
         final int width = 330;
 
         fromX = 20;
@@ -159,19 +152,16 @@ public class MidguitarPanel extends JPanel implements NoteListener {
     }
 
     @Override
-    public void noteStart(final int noteNumber) {
-        SwingUtilities.invokeLater(() -> {
-            if (noteNumber == noteExpected) {
-                noteActual = null;
-                noteExpected = noteGenerator.nextNote();
-                correct++;
-            } else {
-                noteActual = noteNumber;
-                wrong++;
-            }
-            stats.accept(correct, wrong);
-            repaint();
-        });
+    public void newNote(final int note) {
+        this.noteExpected = note;
+        this.noteActual = null;
+        repaint();
+    }
+
+    @Override
+    public void noteGuessed(final int expected, final int actual) {
+        this.noteActual = actual;
+        repaint();
     }
 
 }
