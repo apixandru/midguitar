@@ -26,6 +26,7 @@ public class MidguitarPanel extends JPanel implements NoteListener {
     private final NoteGenerator noteGenerator = new NoteGenerator(49, 76);
 
     private static final Color COLOR_GRID = new Color(0x77000000, true);
+    private static final BasicStroke STROKE_GRID = new BasicStroke(4f);
 
     private static final int POS_E2 = 420;
     private static final int NOTE_E2 = 40;
@@ -92,27 +93,33 @@ public class MidguitarPanel extends JPanel implements NoteListener {
         if (Notes.isSharp(note)) {
             g.drawImage(imgModSharp, x - 29, y - 14, null);
         }
-        final int relationToMainGrid = getRelationToMainGrid(note);
-        if (0 == relationToMainGrid) {
-            return;
-        }
-//        for (int i = 0; i < relationToMainGrid; i++) {
-//            ((Graphics2D) g).setStroke(new BasicStroke(4f));
-//            final Color originalColor = g.getColor();
-//            g.setColor(COLOR_GRID);
-//            g.drawLine(x, y + (imgWholeNote.getHeight() / 2), x + imgWholeNote.getWidth(), y + (imgWholeNote.getHeight() / 2));
-//            g.setColor(originalColor);
-//        }
+        addNoteSupport(g, note, x);
     }
 
     /**
+     * @param g
      * @param note
-     * @return
+     * @param x
+     */
+    private void addNoteSupport(final Graphics g, final int note, final int x) {
+        final int relationToMainGrid = getRelationToMainGrid(note);
+        if (0 < relationToMainGrid) {
+            drawLines(relationToMainGrid, 6 - relationToMainGrid, x, x + imgWholeNote.getWidth(), g);
+        } else if (0 > relationToMainGrid) {
+            drawLines(-relationToMainGrid, 11, x, x + imgWholeNote.getWidth(), g);
+        }
+    }
+
+    /**
+     * @param note the note
+     * @return the relation to the main grid
      */
     private int getRelationToMainGrid(final int note) {
         if (note > 67) {
-//            System.out.println(Notes.getFullNotesInBetween(67, note));
-            return 1;
+            return Notes.getFullNotesInBetween(66, note) / 2;
+        }
+        if (note < 51) {
+            return Notes.getFullNotesInBetween(52, note) / 2;
         }
         return 0;
     }
@@ -121,18 +128,7 @@ public class MidguitarPanel extends JPanel implements NoteListener {
      * @param g
      */
     private void drawLines(final Graphics2D g) {
-        final Color originalColor = g.getColor();
-        final Color outOfRangeColor = new Color(0x11000000, true);
-        g.setColor(outOfRangeColor);
-        final Stroke originalStroke = g.getStroke();
-        g.setStroke(new BasicStroke(4f));
-        drawLines(6, 0, g);
-        g.setColor(new Color(0x66000000, true));
-        drawLines(5, 6, g);
-        g.setColor(outOfRangeColor);
-        drawLines(3, 11, g);
-        g.setColor(originalColor);
-        g.setStroke(originalStroke);
+        drawLines(5, 6, fromX, toX, g);
     }
 
 
@@ -151,13 +147,21 @@ public class MidguitarPanel extends JPanel implements NoteListener {
     /**
      * @param howMany
      * @param startingFrom
+     * @param fromX
+     * @param toX
      * @param g
      */
-    private void drawLines(final int howMany, final int startingFrom, final Graphics g) {
+    private static void drawLines(final int howMany, final int startingFrom, final int fromX, final int toX, final Graphics g) {
+        final Color originalColor = g.getColor();
+        final Stroke originalStroke = ((Graphics2D) g).getStroke();
+        ((Graphics2D) g).setStroke(STROKE_GRID);
+        g.setColor(COLOR_GRID);
         for (int i = startingFrom, to = startingFrom + howMany; i < to; i++) {
             final int y = START_Y + i * DISTANCE_BETWEEN_LINES;
             g.drawLine(fromX, y, toX, y);
         }
+        ((Graphics2D) g).setStroke(originalStroke);
+        g.setColor(originalColor);
     }
 
     @Override
