@@ -4,13 +4,10 @@ import com.apixandru.midguitar.model.NoteGenerator;
 import com.apixandru.midguitar.model.NoteListener;
 import com.apixandru.midguitar.model.Notes;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.function.BiConsumer;
 
 /**
@@ -132,16 +129,13 @@ public class MidguitarPanel extends JPanel implements NoteListener {
     }
 
 
+    /**
+     *
+     */
     private void loadImages() {
-        try (final InputStream streamCg = MidguitarFrame.class.getResourceAsStream("/clef_g.png");
-             final InputStream streamNw = MidguitarFrame.class.getResourceAsStream("/note_whole.png");
-             final InputStream streamMs = MidguitarFrame.class.getResourceAsStream("/mod_sharp.png")) {
-            imgClefG = ImageIO.read(streamCg);
-            imgWholeNote = ImageIO.read(streamNw);
-            imgModSharp = ImageIO.read(streamMs);
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
+        imgClefG = ImageLoader.loadFromClasspath("/clef_g.png");
+        imgWholeNote = ImageLoader.loadFromClasspath("/note_whole.png");
+        imgModSharp = ImageLoader.loadFromClasspath("/mod_sharp.png");
     }
 
     /**
