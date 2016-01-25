@@ -51,7 +51,19 @@ public final class Notes {
      * @param to   the note to which to check
      * @return the number of full notes in between
      */
-    public static int getFullNotesInBetween(final int from, final int to) {
+    public static int getFullNotesInBetween(int from, int to) {
+        if (from > to) {
+            return -getFullNotesInBetween0(to, from);
+        }
+        return getFullNotesInBetween0(from, to);
+    }
+
+    /**
+     * @param from the note from which to start
+     * @param to   the note to which to check
+     * @return the number of full notes in between
+     */
+    private static int getFullNotesInBetween0(final int from, final int to) {
         int count = 0;
         BaseNote lastNote = Notes.getBaseNote(from).getBaseNote();
         for (int i = from; i <= to; i++) {
