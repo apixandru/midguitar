@@ -39,6 +39,7 @@ public final class NoteMatcher implements NoteListener {
      */
     public void addNoteMatchListener(final NoteMatcherListener listener) {
         this.listeners.add(listener);
+        listener.newNote(noteExpected);
     }
 
 }
