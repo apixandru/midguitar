@@ -26,17 +26,20 @@ public class MidguitarSettings extends JPanel {
     private final DefaultComboBoxModel<MidiDevice> modelInput = new DefaultComboBoxModel<>();
     private final DefaultComboBoxModel<MidiDevice> modelOuput = new DefaultComboBoxModel<>();
 
+    private final DefaultComboBoxModel<String> fromModel = newModel(40);
+    private final DefaultComboBoxModel<String> toModel = newModel(86);
+
     private final JCheckBox chkEnableInput = new JCheckBox("Enable Input");
     private final JCheckBox chkEnableOutput = new JCheckBox("Enable Output");
 
+    final JCheckBox chkIncludeSharp = new JCheckBox("Include sharp notes");
+
+
     private final MidguitarModel model = new MidguitarModel();
+    private final NoteMatcherListener noteListener;
 
     MidguitarSettings(final MidiDevices deviceProvider, final NoteMatcherListener noteListener) {
-
-        final NoteMatcher noteMatcher = new NoteMatcher(49, 76, true);
-        noteMatcher.addNoteMatchListener(noteListener);
-
-        model.addListener(noteMatcher);
+        this.noteListener = noteListener;
 
         final Dimension minimumSize = new Dimension(500, 460);
         setMinimumSize(minimumSize);
@@ -68,6 +71,15 @@ public class MidguitarSettings extends JPanel {
                     this.model.addListener(new SynthNoteListener(selectedItem));
                     selectedItem.open();
                 }
+
+                final int from = Notes.getNoteNames().indexOf(fromModel.getSelectedItem());
+                final int to = Notes.getNoteNames().indexOf(toModel.getSelectedItem());
+
+                final NoteMatcher noteMatcher = new NoteMatcher(from, to, chkIncludeSharp.isSelected());
+                noteMatcher.addNoteMatchListener(noteListener);
+                model.addListener(noteMatcher);
+
+
                 model.start();
             } catch (MidiUnavailableException e1) {
                 error("Cannot start device");
@@ -78,17 +90,9 @@ public class MidguitarSettings extends JPanel {
     }
 
     private JPanel createConfig() {
-        final String[] notes = Notes.getNoteNames().toArray(new String[128]);
-        final DefaultComboBoxModel<String> fromModel = new DefaultComboBoxModel<>(notes);
-        fromModel.setSelectedItem(notes[40]);
-        final DefaultComboBoxModel<String> toModel = new DefaultComboBoxModel<>(notes);
-        toModel.setSelectedItem(notes[86]);
-
         final JPanel noteControl = new JPanel();
         noteControl.setLayout(new BoxLayout(noteControl, BoxLayout.X_AXIS));
-        final JCheckBox chk = new JCheckBox();
-        chk.setText("Include sharp notes");
-        noteControl.add(chk);
+        noteControl.add(chkIncludeSharp);
         noteControl.add(new JLabel("   From   "));
         noteControl.add(new JComboBox<>(fromModel));
         noteControl.add(new JLabel("   To   "));
@@ -96,6 +100,17 @@ public class MidguitarSettings extends JPanel {
         noteControl.add(Box.createHorizontalStrut(88));
         noteControl.setBorder(new EmptyBorder(5, 5, 5, 5));
         return noteControl;
+    }
+
+    /**
+     * @param note
+     * @return
+     */
+    private static DefaultComboBoxModel<String> newModel(final int note) {
+        final String[] notes = Notes.getNoteNames().toArray(new String[128]);
+        final DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(notes);
+        model.setSelectedItem(notes[note]);
+        return model;
     }
 
     /**
