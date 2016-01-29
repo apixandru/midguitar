@@ -12,7 +12,7 @@ import java.util.List;
  */
 public final class NoteMatcher implements NoteListener {
 
-    private final NoteGenerator noteGenerator = new NoteGenerator(49, 76);
+    private final NoteGenerator noteGenerator = new NoteGenerator(49, 76, true);
 
     private int noteExpected = noteGenerator.nextNote();
 

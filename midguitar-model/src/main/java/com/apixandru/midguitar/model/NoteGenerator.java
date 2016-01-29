@@ -12,21 +12,28 @@ public final class NoteGenerator {
 
     private final int from;
     private final int step;
+    private final boolean includeSharpNotes;
 
     /**
      * @param from
      * @param to
+     * @param includeSharpNotes
      */
-    public NoteGenerator(final int from, final int to) {
+    public NoteGenerator(final int from, final int to, final boolean includeSharpNotes) {
         this.from = from;
         this.step = to - from + 1;
+        this.includeSharpNotes = includeSharpNotes;
     }
 
     /**
      * @return
      */
     public int nextNote() {
-        return random.nextInt(step) + from;
+        int nextNote;
+        do {
+            nextNote = random.nextInt(step) + from;
+        } while (!includeSharpNotes && Notes.isSharp(nextNote));
+        return nextNote;
     }
 
 }
