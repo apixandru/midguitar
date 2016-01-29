@@ -14,13 +14,6 @@ final class MidiMessageReceiver implements Receiver {
 
     private final List<NoteListener> listeners = new ArrayList<>();
 
-    /**
-     * @param listener note listener
-     */
-    public void addListener(final NoteListener listener) {
-        this.listeners.add(listener);
-    }
-
     @Override
     public void send(final MidiMessage msg, final long timeStamp) {
         final int noteNumber = ((ShortMessage) msg).getData1();
@@ -36,6 +29,20 @@ final class MidiMessageReceiver implements Receiver {
 
     @Override
     public void close() {
+    }
+
+    /**
+     * @param listener note listener
+     */
+    public void addListener(final NoteListener listener) {
+        this.listeners.add(listener);
+    }
+
+    /**
+     * @param listener note listener
+     */
+    public void removeListener(final NoteListener listener) {
+        this.listeners.remove(listener);
     }
 
 }
