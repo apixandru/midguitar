@@ -16,12 +16,6 @@ import java.util.stream.Stream;
 public final class MidiDevices {
 
     /**
-     *
-     */
-    MidiDevices() {
-    }
-
-    /**
      * @return the midi devices
      * @throws MidiUnavailableException
      */
@@ -37,7 +31,7 @@ public final class MidiDevices {
      * @return the synthesizers
      * @throws MidiUnavailableException
      */
-    static List<Synthesizer> getSynthesizers() throws MidiUnavailableException {
+    public List<Synthesizer> getSynthesizers() throws MidiUnavailableException {
         return getDevices()
                 .filter(Synthesizer.class::isInstance)
                 .map(Synthesizer.class::cast)
@@ -49,7 +43,7 @@ public final class MidiDevices {
      * @return the input devices
      * @throws MidiUnavailableException
      */
-    public static List<MidiDevice> getInputDevices() throws MidiUnavailableException {
+    public List<MidiDevice> getInputDevices() throws MidiUnavailableException {
         return getDevices()
                 .filter(dev -> 0 != dev.getMaxTransmitters())
                 .collect(Collectors.toList());

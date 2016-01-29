@@ -20,7 +20,7 @@ public final class MidGuitarFactory {
      * @throws MidiUnavailableException
      */
     public static SynthNoteListener newSynthNoteListener() throws MidiUnavailableException {
-        final Synthesizer synthesizer = MidiDevices.getSynthesizers().get(0);
+        final Synthesizer synthesizer = new MidiDevices().getSynthesizers().get(0);
         synthesizer.open();
         return new SynthNoteListener(synthesizer);
     }

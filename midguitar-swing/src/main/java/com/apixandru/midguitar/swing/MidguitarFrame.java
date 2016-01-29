@@ -29,7 +29,7 @@ public final class MidguitarFrame {
         final NoteMatcher noteMatcher = new NoteMatcher();
         noteMatcher.addNoteMatchListener(panel);
 
-        MidiHandler.connect(MidiDevices.getInputDevices().get(0),
+        MidiHandler.connect(new MidiDevices().getInputDevices().get(0),
                 Arrays.asList(MidGuitarFactory.newSynthNoteListener(), noteMatcher));
     }
 
