@@ -1,6 +1,7 @@
 package com.apixandru.midguitar.swing;
 
 import com.apixandru.midguitar.model.MidiDevices;
+import com.apixandru.midguitar.model.Notes;
 
 import javax.sound.midi.MidiDevice;
 import javax.swing.*;
@@ -44,15 +45,21 @@ public class MidguitarSettings extends JPanel {
     }
 
     private JPanel createConfig() {
+        final String[] notes = Notes.getNoteNames().toArray(new String[128]);
+        final DefaultComboBoxModel<String> fromModel = new DefaultComboBoxModel<>(notes);
+        fromModel.setSelectedItem(notes[40]);
+        final DefaultComboBoxModel<String> toModel = new DefaultComboBoxModel<>(notes);
+        toModel.setSelectedItem(notes[86]);
+
         final JPanel noteControl = new JPanel();
         noteControl.setLayout(new BoxLayout(noteControl, BoxLayout.X_AXIS));
         final JCheckBox chk = new JCheckBox();
         chk.setText("Include sharp notes");
         noteControl.add(chk);
         noteControl.add(new JLabel("   From   "));
-        noteControl.add(new JComboBox<>());
+        noteControl.add(new JComboBox<>(fromModel));
         noteControl.add(new JLabel("   To   "));
-        noteControl.add(new JComboBox<>());
+        noteControl.add(new JComboBox<>(toModel));
         noteControl.setBorder(new EmptyBorder(5, 5, 5, 5));
         return noteControl;
     }
