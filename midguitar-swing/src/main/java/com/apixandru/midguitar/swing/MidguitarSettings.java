@@ -1,9 +1,11 @@
 package com.apixandru.midguitar.swing;
 
+import com.apixandru.midguitar.model.MidguitarModel;
 import com.apixandru.midguitar.model.MidiDevices;
 import com.apixandru.midguitar.model.Notes;
 
 import javax.sound.midi.MidiDevice;
+import javax.sound.midi.MidiUnavailableException;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -19,6 +21,8 @@ public class MidguitarSettings extends JPanel {
 
     private final DefaultComboBoxModel<MidiDevice> modelInput = new DefaultComboBoxModel<>();
     private final DefaultComboBoxModel<MidiDevice> modelOuput = new DefaultComboBoxModel<>();
+
+    private final MidguitarModel model = new MidguitarModel();
 
     MidguitarSettings(final MidiDevices deviceProvider) {
         final Dimension minimumSize = new Dimension(500, 460);
@@ -40,7 +44,15 @@ public class MidguitarSettings extends JPanel {
         jPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
         jPanel.add(Box.createHorizontalGlue());
-        jPanel.add(new JButton("Start"));
+        final JButton start = new JButton("Start");
+        start.addActionListener(e -> {
+            try {
+                model.start();
+            } catch (MidiUnavailableException e1) {
+                error("Cannot start device");
+            }
+        });
+        jPanel.add(start);
         return jPanel;
     }
 
@@ -60,6 +72,7 @@ public class MidguitarSettings extends JPanel {
         noteControl.add(new JComboBox<>(fromModel));
         noteControl.add(new JLabel("   To   "));
         noteControl.add(new JComboBox<>(toModel));
+        noteControl.add(Box.createHorizontalStrut(88));
         noteControl.setBorder(new EmptyBorder(5, 5, 5, 5));
         return noteControl;
     }
@@ -105,13 +118,11 @@ public class MidguitarSettings extends JPanel {
                     .forEach(model::addElement);
         } catch (final Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null,
-                    "Cannot reload devices",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-
+            error("Cannot reload devices");
         }
     }
 
-
+    private static void error(String message) {
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
 }
