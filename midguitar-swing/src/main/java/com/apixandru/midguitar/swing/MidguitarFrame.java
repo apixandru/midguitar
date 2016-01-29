@@ -1,15 +1,11 @@
 package com.apixandru.midguitar.swing;
 
-import com.apixandru.midguitar.model.MidGuitarFactory;
 import com.apixandru.midguitar.model.MidiDevices;
-import com.apixandru.midguitar.model.MidiHandler;
-import com.apixandru.midguitar.model.matcher.NoteMatcher;
 
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.Arrays;
 
 /**
  * @author Alexandru-Constantin Bledea
