@@ -12,11 +12,16 @@ import java.util.List;
  */
 public final class NoteMatcher implements NoteListener {
 
-    private final NoteGenerator noteGenerator = new NoteGenerator(49, 76, true);
+    private final NoteGenerator noteGenerator;
 
-    private int noteExpected = noteGenerator.nextNote();
+    private int noteExpected;
 
     private final List<NoteMatcherListener> listeners = new ArrayList<>();
+
+    public NoteMatcher(final int from, final int to, final boolean includeSharp) {
+        this.noteGenerator = new NoteGenerator(from, to, includeSharp);
+        this.noteExpected = noteGenerator.nextNote();
+    }
 
     @Override
     public void noteStart(final int noteNumber) {

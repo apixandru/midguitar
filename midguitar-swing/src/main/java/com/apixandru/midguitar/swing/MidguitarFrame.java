@@ -27,7 +27,7 @@ public final class MidguitarFrame {
         midguitar.setLocationRelativeTo(null);
         midguitar.setVisible(true);
 
-        final NoteMatcher noteMatcher = new NoteMatcher();
+        final NoteMatcher noteMatcher = new NoteMatcher(49, 76, true);
         noteMatcher.addNoteMatchListener(panel);
 
         MidiHandler.connect(new MidiDevices().getInputDevices().get(0),
