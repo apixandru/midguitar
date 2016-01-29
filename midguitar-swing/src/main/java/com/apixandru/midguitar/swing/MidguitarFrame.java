@@ -22,6 +22,7 @@ public final class MidguitarFrame {
         midguitar.getContentPane().setLayout(new GridBagLayout());
         final MidguitarPanel panel = new MidguitarPanel();
         midguitar.add(panel);
+        midguitar.add(new MidguitarSettings(new MidiDevices()));
         midguitar.pack();
         midguitar.setLocationRelativeTo(null);
         midguitar.setVisible(true);
