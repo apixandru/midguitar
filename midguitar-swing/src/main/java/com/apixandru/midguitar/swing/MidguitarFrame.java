@@ -7,6 +7,7 @@ import com.apixandru.midguitar.model.matcher.NoteMatcher;
 
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.Arrays;
 
@@ -19,7 +20,10 @@ public final class MidguitarFrame {
     public static void main(String[] args) throws MidiUnavailableException {
         final JFrame midguitar = new JFrame();
         midguitar.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        midguitar.getContentPane().setLayout(new GridBagLayout());
+        final JPanel contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
+        midguitar.setContentPane(contentPane);
+        contentPane.setLayout(new GridBagLayout());
         final MidguitarPanel panel = new MidguitarPanel();
         midguitar.add(panel);
         midguitar.add(new MidguitarSettings(new MidiDevices()));
