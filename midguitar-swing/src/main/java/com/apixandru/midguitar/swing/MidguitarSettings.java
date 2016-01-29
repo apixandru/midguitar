@@ -3,9 +3,13 @@ package com.apixandru.midguitar.swing;
 import com.apixandru.midguitar.model.MidguitarModel;
 import com.apixandru.midguitar.model.MidiDevices;
 import com.apixandru.midguitar.model.Notes;
+import com.apixandru.midguitar.model.SynthNoteListener;
+import com.apixandru.midguitar.model.matcher.NoteMatcher;
+import com.apixandru.midguitar.model.matcher.NoteMatcherListener;
 
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Synthesizer;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -22,9 +26,18 @@ public class MidguitarSettings extends JPanel {
     private final DefaultComboBoxModel<MidiDevice> modelInput = new DefaultComboBoxModel<>();
     private final DefaultComboBoxModel<MidiDevice> modelOuput = new DefaultComboBoxModel<>();
 
+    private final JCheckBox chkEnableInput = new JCheckBox("Enable Input");
+    private final JCheckBox chkEnableOutput = new JCheckBox("Enable Output");
+
     private final MidguitarModel model = new MidguitarModel();
 
-    MidguitarSettings(final MidiDevices deviceProvider) {
+    MidguitarSettings(final MidiDevices deviceProvider, final NoteMatcherListener noteListener) {
+
+        final NoteMatcher noteMatcher = new NoteMatcher(49, 76, true);
+        noteMatcher.addNoteMatchListener(noteListener);
+
+        model.addListener(noteMatcher);
+
         final Dimension minimumSize = new Dimension(500, 460);
         setMinimumSize(minimumSize);
         setPreferredSize(minimumSize);
@@ -33,8 +46,8 @@ public class MidguitarSettings extends JPanel {
         final JPanel jPanel = new JPanel();
         add(jPanel, BorderLayout.NORTH);
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
-        jPanel.add(createPanel("Enable Input", modelInput, deviceProvider::getInputDevices));
-        jPanel.add(createPanel("Enable Output", modelOuput, deviceProvider::getSynthesizers));
+        jPanel.add(createPanel(chkEnableInput, modelInput, deviceProvider::getInputDevices));
+        jPanel.add(createPanel(chkEnableOutput, modelOuput, deviceProvider::getSynthesizers));
         jPanel.add(createConfig());
         jPanel.add(createStart());
     }
@@ -47,6 +60,14 @@ public class MidguitarSettings extends JPanel {
         final JButton start = new JButton("Start");
         start.addActionListener(e -> {
             try {
+                if (chkEnableInput.isSelected()) {
+                    model.setDevice((MidiDevice) modelInput.getSelectedItem());
+                }
+                if (chkEnableOutput.isSelected()) {
+                    final Synthesizer selectedItem = (Synthesizer) modelOuput.getSelectedItem();
+                    this.model.addListener(new SynthNoteListener(selectedItem));
+                    selectedItem.open();
+                }
                 model.start();
             } catch (MidiUnavailableException e1) {
                 error("Cannot start device");
@@ -78,13 +99,13 @@ public class MidguitarSettings extends JPanel {
     }
 
     /**
-     * @param enableText
+     * @param checkbox
      * @param model
      * @param deviceMethod
      * @return
      */
     private static JPanel createPanel(
-            final String enableText,
+            final JCheckBox checkbox,
             final DefaultComboBoxModel<MidiDevice> model,
             final Callable<List<? extends MidiDevice>> deviceMethod) {
 
@@ -92,13 +113,9 @@ public class MidguitarSettings extends JPanel {
         jPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
 
-        JCheckBox cbUseOutputDevice = new JCheckBox();
-        cbUseOutputDevice.setText(enableText);
-        jPanel.add(cbUseOutputDevice);
+        jPanel.add(checkbox);
         final JComboBox<MidiDevice> cmbOutput = new JComboBox<>(model);
         cmbOutput.setRenderer(new MidiCellRenderer());
-//        cmbOutput.setMaximumSize(new Dimension(200, Integer.MAX_VALUE));
-//        cmbOutput.setPreferredSize(new Dimension(100, cmbOutput.getPreferredSize().height));
 
         jPanel.add(cmbOutput);
         jPanel.add(Box.createHorizontalStrut(5));

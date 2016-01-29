@@ -9,7 +9,7 @@ import java.util.Objects;
  * @author Alexandru-Constantin Bledea
  * @since January 24, 2016
  */
-final class SynthNoteListener implements NoteListener, AutoCloseable {
+public final class SynthNoteListener implements NoteListener, AutoCloseable {
 
     private final Synthesizer synthesizer;
     private final MidiChannel midiChannel;
@@ -17,7 +17,7 @@ final class SynthNoteListener implements NoteListener, AutoCloseable {
     /**
      * @param synthesizer the synthesizer
      */
-    SynthNoteListener(final Synthesizer synthesizer) {
+    public SynthNoteListener(final Synthesizer synthesizer) {
         this.synthesizer = synthesizer;
         this.midiChannel = Arrays.stream(this.synthesizer.getChannels())
                 .filter(Objects::nonNull)

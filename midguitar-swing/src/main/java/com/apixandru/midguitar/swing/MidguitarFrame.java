@@ -26,16 +26,10 @@ public final class MidguitarFrame {
         contentPane.setLayout(new GridBagLayout());
         final MidguitarPanel panel = new MidguitarPanel();
         midguitar.add(panel);
-        midguitar.add(new MidguitarSettings(new MidiDevices()));
+        midguitar.add(new MidguitarSettings(new MidiDevices(), panel));
         midguitar.pack();
         midguitar.setLocationRelativeTo(null);
         midguitar.setVisible(true);
-
-        final NoteMatcher noteMatcher = new NoteMatcher(49, 76, true);
-        noteMatcher.addNoteMatchListener(panel);
-
-        MidiHandler.connect(new MidiDevices().getInputDevices().get(0),
-                Arrays.asList(MidGuitarFactory.newSynthNoteListener(), noteMatcher));
     }
 
 }
