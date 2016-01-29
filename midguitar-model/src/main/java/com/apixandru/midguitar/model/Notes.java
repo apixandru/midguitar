@@ -1,10 +1,34 @@
 package com.apixandru.midguitar.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author Alexandru-Constantin Bledea
  * @since January 23, 2016
  */
 public final class Notes {
+
+    private static final List<String> NOTE_NAMES;
+
+    static {
+        final List<String> noteNames = new ArrayList<>(128);
+        final List<String> baseNotes = Arrays.asList("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B");
+        int octave = -1;
+        int maxNotes = baseNotes.size();
+        for (int i = 0, currentNote = 0; i <= 127; i++) {
+            final String baseNote = baseNotes.get(currentNote);
+            noteNames.add(baseNote + octave);
+            currentNote++;
+            if (currentNote == maxNotes) {
+                currentNote = 0;
+                octave++;
+            }
+        }
+        NOTE_NAMES = Collections.unmodifiableList(noteNames);
+    }
 
     /**
      *
@@ -17,7 +41,7 @@ public final class Notes {
      * @return the note name with octave
      */
     public static String getNoteNameWithOctave(final int noteNumber) {
-        return getBaseNote(noteNumber).getValue() + getOctave(noteNumber);
+        return NOTE_NAMES.get(noteNumber);
     }
 
     /**
@@ -34,7 +58,7 @@ public final class Notes {
      * @return if the note is sharp
      */
     public static boolean isSharp(final int noteNumber) {
-        return getBaseNote(noteNumber).isSharp();
+        return getNoteNameWithOctave(noteNumber).contains("#");
     }
 
     /**
@@ -76,12 +100,8 @@ public final class Notes {
         return count;
     }
 
-    /**
-     * @param noteNumber the midi note number
-     * @return the octave
-     */
-    public static int getOctave(final int noteNumber) {
-        return noteNumber / BaseNote.values().length - 1;
+    public static List<String> getNoteNames() {
+        return NOTE_NAMES;
     }
 
 }
