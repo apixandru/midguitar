@@ -19,7 +19,7 @@ final class MidiCellRenderer extends DefaultListCellRenderer {
         final Component component = super.getListCellRendererComponent(list, value, index, isSelected,
                 cellHasFocus);
         if (value instanceof MidiDevice && component instanceof JLabel) {
-            final String description = ((MidiDevice) value).getDeviceInfo().getDescription();
+            final String description = ((MidiDevice) value).getDeviceInfo().getName();
             ((JLabel) component).setText(description);
 
         }

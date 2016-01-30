@@ -32,8 +32,7 @@ public class MidguitarSettings extends JPanel {
     private final JCheckBox chkEnableInput = new JCheckBox("Enable Input");
     private final JCheckBox chkEnableOutput = new JCheckBox("Enable Output");
 
-    final JCheckBox chkIncludeSharp = new JCheckBox("Include sharp notes");
-
+    private final JCheckBox chkIncludeSharp = new JCheckBox("Include sharp notes");
 
     private final MidguitarModel model = new MidguitarModel();
     private final NoteMatcherListener noteListener;
