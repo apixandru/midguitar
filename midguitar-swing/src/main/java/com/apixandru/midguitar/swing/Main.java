@@ -11,7 +11,7 @@ import java.awt.*;
  * @author Alexandru-Constantin Bledea
  * @since January 24, 2016
  */
-public final class MidguitarFrame {
+public final class Main {
 
     public static void main(String[] args) throws MidiUnavailableException {
         final JFrame midguitar = new JFrame();
