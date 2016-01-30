@@ -1,7 +1,8 @@
 package com.apixandru.midguitar.swing;
 
-import com.apixandru.midguitar.model.MidguitarModel;
 import com.apixandru.midguitar.model.MidiDevices;
+import com.apixandru.midguitar.model.MidiInput;
+import com.apixandru.midguitar.model.MidiInputRealDevice;
 import com.apixandru.midguitar.model.Notes;
 import com.apixandru.midguitar.model.SynthNoteListener;
 import com.apixandru.midguitar.model.matcher.NoteMatcher;
@@ -34,7 +35,7 @@ public class MidguitarSettings extends JPanel {
 
     private final JCheckBox chkIncludeSharp = new JCheckBox("Include sharp notes");
 
-    private final MidguitarModel model = new MidguitarModel();
+    private MidiInput input;
     private final NoteMatcherListener noteListener;
 
     MidguitarSettings(final MidiDevices deviceProvider, final NoteMatcherListener noteListener) {
@@ -62,12 +63,13 @@ public class MidguitarSettings extends JPanel {
         final JButton start = new JButton("Start");
         start.addActionListener(e -> {
             try {
-                if (chkEnableInput.isSelected()) {
-                    model.setDevice((MidiDevice) modelInput.getSelectedItem());
+                if (null != input) {
+                    input.close();
                 }
+                input = new MidiInputRealDevice((MidiDevice) modelInput.getSelectedItem());
                 if (chkEnableOutput.isSelected()) {
                     final Synthesizer selectedItem = (Synthesizer) modelOuput.getSelectedItem();
-                    this.model.addListener(new SynthNoteListener(selectedItem));
+                    this.input.addListener(new SynthNoteListener(selectedItem));
                     selectedItem.open();
                 }
 
@@ -76,10 +78,10 @@ public class MidguitarSettings extends JPanel {
 
                 final NoteMatcher noteMatcher = new NoteMatcher(from, to, chkIncludeSharp.isSelected());
                 noteMatcher.addNoteMatchListener(noteListener);
-                model.addListener(noteMatcher);
+                input.addListener(noteMatcher);
 
 
-                model.start();
+                input.open();
             } catch (MidiUnavailableException e1) {
                 error("Cannot start device");
             }

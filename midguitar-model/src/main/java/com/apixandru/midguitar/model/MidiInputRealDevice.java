@@ -12,7 +12,7 @@ public final class MidiInputRealDevice implements MidiInput {
     private final MidiDevice device;
     private MidiMessageReceiver receiver = new MidiMessageReceiver();
 
-    private MidiInputRealDevice(final MidiDevice device) {
+    public MidiInputRealDevice(final MidiDevice device) {
         this.device = device;
     }
 
