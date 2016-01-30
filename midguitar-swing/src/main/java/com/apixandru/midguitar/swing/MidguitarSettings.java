@@ -30,7 +30,6 @@ public class MidguitarSettings extends JPanel {
     private final DefaultComboBoxModel<String> fromModel = newModel(40);
     private final DefaultComboBoxModel<String> toModel = newModel(86);
 
-    private final JCheckBox chkEnableInput = new JCheckBox("Enable Input");
     private final JCheckBox chkEnableOutput = new JCheckBox("Enable Output");
 
     private final JCheckBox chkIncludeSharp = new JCheckBox("Include sharp notes");
@@ -49,7 +48,7 @@ public class MidguitarSettings extends JPanel {
         final JPanel jPanel = new JPanel();
         add(jPanel, BorderLayout.NORTH);
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
-        jPanel.add(createPanel(chkEnableInput, modelInput, deviceProvider::getInputDevices));
+        jPanel.add(createPanel(null, modelInput, deviceProvider::getInputDevices));
         jPanel.add(createPanel(chkEnableOutput, modelOuput, deviceProvider::getSynthesizers));
         jPanel.add(createConfig());
         jPanel.add(createStart());
@@ -129,13 +128,17 @@ public class MidguitarSettings extends JPanel {
         jPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
 
-        jPanel.add(checkbox);
+        if (null != checkbox) {
+            jPanel.add(checkbox);
+        }
         final JComboBox<MidiDevice> cmbOutput = new JComboBox<>(model);
         cmbOutput.setRenderer(new MidiCellRenderer());
 
         jPanel.add(cmbOutput);
         jPanel.add(Box.createHorizontalStrut(5));
-        jPanel.add(new JButton("Reload"));
+        final JButton reload = new JButton("Rescan");
+        reload.addActionListener(e -> refreshSynthesizers(model, deviceMethod));
+        jPanel.add(reload);
         refreshSynthesizers(model, deviceMethod);
         return jPanel;
     }
