@@ -11,7 +11,8 @@ import java.util.List;
  */
 public final class Notes {
 
-    private static final List<String> NOTE_NAMES;
+    public static final List<String> ALL_NOTE_NAMES;
+    public static final List<String> BASE_NOTE_NAMES;
 
     static {
         final List<String> noteNames = new ArrayList<>(128);
@@ -27,7 +28,8 @@ public final class Notes {
                 octave++;
             }
         }
-        NOTE_NAMES = Collections.unmodifiableList(noteNames);
+        ALL_NOTE_NAMES = Collections.unmodifiableList(noteNames);
+        BASE_NOTE_NAMES = Collections.unmodifiableList(baseNotes);
     }
 
     /**
@@ -41,7 +43,7 @@ public final class Notes {
      * @return the note name with octave
      */
     public static String getNoteNameWithOctave(final int noteNumber) {
-        return NOTE_NAMES.get(noteNumber);
+        return ALL_NOTE_NAMES.get(noteNumber);
     }
 
     /**
@@ -101,7 +103,7 @@ public final class Notes {
     }
 
     public static List<String> getNoteNames() {
-        return NOTE_NAMES;
+        return ALL_NOTE_NAMES;
     }
 
 }
