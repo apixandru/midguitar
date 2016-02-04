@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * @author Alexandru-Constantin Bledea
  * @since January 24, 2016
  */
-public final class MidiDevices {
+public class MidiDevices {
 
     /**
      * @return the midi devices
@@ -43,9 +43,10 @@ public final class MidiDevices {
      * @return the input devices
      * @throws MidiUnavailableException
      */
-    public List<MidiDevice> getInputDevices() throws MidiUnavailableException {
+    public List<MidiInput> getInputDevices() throws MidiUnavailableException {
         return getDevices()
                 .filter(dev -> 0 != dev.getMaxTransmitters())
+                .map(MidiInputRealDevice::new)
                 .collect(Collectors.toList());
     }
 

@@ -35,7 +35,7 @@ import java.util.concurrent.Callable;
  */
 public class MidguitarSettings extends JPanel {
 
-    private final DefaultComboBoxModel<MidiDevice> modelInput = new DefaultComboBoxModel<>();
+    private final DefaultComboBoxModel<MidiInput> modelInput = new DefaultComboBoxModel<>();
     private final DefaultComboBoxModel<MidiDevice> modelOuput = new DefaultComboBoxModel<>();
 
     private final DefaultComboBoxModel<String> fromModel = newModel(40);
@@ -146,10 +146,10 @@ public class MidguitarSettings extends JPanel {
      * @param deviceMethod
      * @return
      */
-    private static JPanel createPanel(
+    private static <T> JPanel createPanel(
             final JCheckBox checkbox,
-            final DefaultComboBoxModel<MidiDevice> model,
-            final Callable<List<? extends MidiDevice>> deviceMethod) {
+            final DefaultComboBoxModel<T> model,
+            final Callable<List<? extends T>> deviceMethod) {
 
         final JPanel jPanel = new JPanel();
         jPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -158,7 +158,7 @@ public class MidguitarSettings extends JPanel {
         if (null != checkbox) {
             jPanel.add(checkbox);
         }
-        final JComboBox<MidiDevice> cmbOutput = new JComboBox<>(model);
+        final JComboBox<T> cmbOutput = new JComboBox<>(model);
         cmbOutput.setRenderer(new MidiCellRenderer());
 
         jPanel.add(cmbOutput);
@@ -174,7 +174,7 @@ public class MidguitarSettings extends JPanel {
      * @param model
      * @param deviceProvider
      */
-    private static void refreshSynthesizers(final DefaultComboBoxModel<MidiDevice> model, final Callable<java.util.List<? extends MidiDevice>> deviceProvider) {
+    private static <T> void refreshSynthesizers(final DefaultComboBoxModel<T> model, final Callable<List<? extends T>> deviceProvider) {
         try {
             model.removeAllElements();
             deviceProvider.call()
