@@ -3,6 +3,7 @@ package com.apixandru.midguitar.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -10,6 +11,10 @@ import java.util.List;
  * @since January 23, 2016
  */
 public final class Notes {
+
+    public static final int SUPPORTED_NOTE_FIRST = 40;
+    public static final int SUPPORTED_NOTE_LAST = 88;
+
 
     public static final List<String> ALL_NOTE_NAMES;
     public static final List<String> BASE_NOTE_NAMES;
@@ -113,6 +118,39 @@ public final class Notes {
 
     public static List<String> getNoteNames() {
         return ALL_NOTE_NAMES;
+    }
+
+    /**
+     * @param includeSharp do we include sharp notes
+     * @return all the supported notes
+     */
+    public static List<String> getSupportedNoteNames(final boolean includeSharp) {
+        final List<String> supportedNoteNames = getSupportedNoteNames();
+        if (includeSharp) {
+            return supportedNoteNames;
+        }
+        final List<String> newNotes = new ArrayList<>(supportedNoteNames);
+        removeSharpNotes(newNotes);
+        return Collections.unmodifiableList(newNotes);
+    }
+
+    /**
+     * @return all the supported notes
+     */
+    public static List<String> getSupportedNoteNames() {
+        return ALL_NOTE_NAMES.subList(SUPPORTED_NOTE_FIRST, SUPPORTED_NOTE_LAST + 1);
+    }
+
+    /**
+     * @param noteNames the note names
+     */
+    private static void removeSharpNotes(final List<String> noteNames) {
+        final Iterator<String> it = noteNames.iterator();
+        while (it.hasNext()) {
+            if (it.next().contains("#")) {
+                it.remove();
+            }
+        }
     }
 
 }
