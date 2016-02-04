@@ -10,10 +10,13 @@ import javax.sound.midi.MidiUnavailableException;
 public final class MidiInputRealDevice implements MidiInput {
 
     private final MidiDevice device;
+    private final String name;
+
     private MidiMessageReceiver receiver = new MidiMessageReceiver();
 
     public MidiInputRealDevice(final MidiDevice device) {
         this.device = device;
+        this.name = device.getDeviceInfo().getName();
     }
 
     @Override
@@ -38,6 +41,11 @@ public final class MidiInputRealDevice implements MidiInput {
     @Override
     public void removeListener(final NoteListener listener) {
         receiver.removeListener(listener);
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
 }

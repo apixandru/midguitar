@@ -6,7 +6,7 @@ import javax.sound.midi.MidiUnavailableException;
  * @author Alexandru-Constantin Bledea
  * @since January 30, 2016
  */
-public interface MidiInput {
+public interface MidiInput extends NamedDevice {
 
     /**
      * @throws MidiUnavailableException
