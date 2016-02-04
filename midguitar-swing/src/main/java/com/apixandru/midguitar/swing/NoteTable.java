@@ -5,6 +5,7 @@ import com.apixandru.midguitar.model.NoteListener;
 import com.apixandru.midguitar.model.Notes;
 
 import javax.sound.midi.MidiUnavailableException;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -19,7 +20,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Alexandru-Constantin Bledea
@@ -28,6 +31,8 @@ import java.util.List;
 public class NoteTable extends JPanel implements MidiInput {
 
     private final List<JLabel> noteLabels;
+    private final Map<String, JLabel> octaveLabels = new HashMap<>();
+    private final Map<String, JLabel> noteHeaderLabels = new HashMap<>();
 
     private final List<NoteListener> listeners = new ArrayList<>();
 
@@ -39,7 +44,10 @@ public class NoteTable extends JPanel implements MidiInput {
         setLayout(new GridLayout(0, Notes.BASE_NOTE_NAMES.size() + 1));
         addHeader();
         addOctavesAndNotes();
-        addMouseListener(new NoteTableGameListener());
+        add(new JPanel());
+        final NoteTableMouseListener listener = new NoteTableMouseListener();
+        addMouseListener(listener);
+        addMouseMotionListener(listener);
     }
 
     /**
@@ -77,8 +85,11 @@ public class NoteTable extends JPanel implements MidiInput {
 
         for (int i = firstNote; i < lastNote; i++) {
             if (i % numBasicNotes == 0) {
-                final int octave = Notes.getOctave(i);
-                add(new JLabel(String.valueOf(octave), SwingConstants.CENTER));
+                final String octaveString = String.valueOf(Notes.getOctave(i));
+                final JLabel octaveLabel = new JLabel(octaveString, SwingConstants.CENTER);
+                octaveLabel.setOpaque(true);
+                octaveLabels.put(octaveString, octaveLabel);
+                add(octaveLabel);
             }
             final JLabel noteLabel = noteLabels.get(i);
             if (null != noteLabel) {
@@ -97,7 +108,11 @@ public class NoteTable extends JPanel implements MidiInput {
         Notes.BASE_NOTE_NAMES.
                 stream()
                 .map(note -> new JLabel(note, SwingConstants.CENTER))
-                .forEachOrdered(this::add);
+                .forEachOrdered(label -> {
+                    label.setOpaque(true);
+                    noteHeaderLabels.put(label.getText(), label);
+                    add(label);
+                });
     }
 
 
@@ -127,7 +142,16 @@ public class NoteTable extends JPanel implements MidiInput {
     }
 
 
-    private class NoteTableGameListener extends MouseAdapter {
+    private class NoteTableMouseListener extends MouseAdapter {
+
+        private final LineBorder border = new LineBorder(Color.RED);
+
+        private String fullNoteName;
+        private String noteName;
+        private String octave;
+
+        private JLabel octaveLabel = new JLabel();
+        private JLabel noteLabel = new JLabel();
 
         @Override
         public void mouseReleased(final MouseEvent e) {
@@ -137,5 +161,44 @@ public class NoteTable extends JPanel implements MidiInput {
                 listeners.forEach(noteListener -> noteListener.noteStart(noteNumber));
             }
         }
+
+        @Override
+        public void mouseMoved(final MouseEvent e) {
+            final JComponent componentAt = (JComponent) findComponentAt(e.getPoint());
+            final int noteNumber = noteLabels.indexOf(componentAt);
+            if (-1 == noteNumber) {
+                clearStyle();
+                return;
+            }
+
+            final String noteNameWithOctave = Notes.getNoteNameWithOctave(noteNumber);
+            final String octave = noteNameWithOctave.substring(noteNameWithOctave.length() - 1);
+            final String noteName = noteNameWithOctave.substring(0, noteNameWithOctave.length() - 1);
+            final JLabel octaveLabel = octaveLabels.get(octave);
+            final JLabel noteLabel = noteHeaderLabels.get(noteName);
+
+            synchronized (this) {
+                if (noteNameWithOctave.equals(fullNoteName)) {
+                    return;
+                }
+
+                clearStyle();
+
+                this.fullNoteName = noteNameWithOctave;
+                this.octaveLabel = octaveLabel;
+                this.noteLabel = noteLabel;
+
+                octaveLabel.setBorder(border);
+                noteLabel.setBorder(border);
+
+            }
+        }
+
+        private void clearStyle() {
+            this.fullNoteName = null;
+            this.octaveLabel.setBorder(null);
+            this.noteLabel.setBorder(null);
+        }
+
     }
 }

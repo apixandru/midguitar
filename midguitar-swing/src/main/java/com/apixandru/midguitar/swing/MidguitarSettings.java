@@ -63,7 +63,7 @@ public class MidguitarSettings extends JPanel {
         jPanel.add(createPanel(chkEnableOutput, modelOuput, deviceProvider::getSynthesizers));
         jPanel.add(createConfig());
         jPanel.add(createStart());
-        jPanel.add(Box.createVerticalStrut(130));
+        jPanel.add(Box.createVerticalStrut(128));
         final NoteTable noteTable = new NoteTable();
         jPanel.add(noteTable);
         modelInput.addElement(noteTable);
