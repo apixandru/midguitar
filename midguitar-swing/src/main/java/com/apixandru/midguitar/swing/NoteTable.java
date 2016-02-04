@@ -1,7 +1,10 @@
 package com.apixandru.midguitar.swing;
 
+import com.apixandru.midguitar.model.MidiInput;
+import com.apixandru.midguitar.model.NoteListener;
 import com.apixandru.midguitar.model.Notes;
 
+import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -9,8 +12,11 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,9 +25,11 @@ import java.util.List;
  * @author Alexandru-Constantin Bledea
  * @since February 03, 2016
  */
-public class NoteTable extends JPanel {
+public class NoteTable extends JPanel implements MidiInput {
 
     private final List<JLabel> noteLabels;
+
+    private final List<NoteListener> listeners = new ArrayList<>();
 
     /**
      *
@@ -31,6 +39,7 @@ public class NoteTable extends JPanel {
         setLayout(new GridLayout(0, Notes.BASE_NOTE_NAMES.size() + 1));
         addHeader();
         addOctavesAndNotes();
+        addMouseListener(new NoteTableGameListener());
     }
 
     /**
@@ -91,4 +100,42 @@ public class NoteTable extends JPanel {
                 .forEachOrdered(this::add);
     }
 
+
+    @Override
+    public void open() throws MidiUnavailableException {
+
+    }
+
+    @Override
+    public void close() throws MidiUnavailableException {
+
+    }
+
+    @Override
+    public void addListener(final NoteListener listener) {
+        this.listeners.add(listener);
+    }
+
+    @Override
+    public void removeListener(final NoteListener listener) {
+        this.listeners.remove(listener);
+    }
+
+    @Override
+    public String getName() {
+        return "Note Table";
+    }
+
+
+    private class NoteTableGameListener extends MouseAdapter {
+
+        @Override
+        public void mouseReleased(final MouseEvent e) {
+            final Component componentAt = findComponentAt(e.getPoint());
+            final int noteNumber = noteLabels.indexOf(componentAt);
+            if (-1 != noteNumber) {
+                listeners.forEach(noteListener -> noteListener.noteStart(noteNumber));
+            }
+        }
+    }
 }

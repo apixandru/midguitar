@@ -64,7 +64,9 @@ public class MidguitarSettings extends JPanel {
         jPanel.add(createConfig());
         jPanel.add(createStart());
         jPanel.add(Box.createVerticalStrut(130));
-        jPanel.add(new NoteTable());
+        final NoteTable noteTable = new NoteTable();
+        jPanel.add(noteTable);
+        modelInput.addElement(noteTable);
     }
 
     private Component createStart() {
@@ -78,7 +80,7 @@ public class MidguitarSettings extends JPanel {
                 if (null != input) {
                     input.close();
                 }
-                input = new MidiInputRealDevice((MidiDevice) modelInput.getSelectedItem());
+                input = (MidiInput) modelInput.getSelectedItem();
                 if (chkEnableOutput.isSelected()) {
                     final Synthesizer selectedItem = (Synthesizer) modelOuput.getSelectedItem();
                     this.input.addListener(new SynthNoteListener(selectedItem));
