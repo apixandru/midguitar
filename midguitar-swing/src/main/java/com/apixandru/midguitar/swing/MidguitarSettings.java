@@ -11,10 +11,21 @@ import com.apixandru.midguitar.model.matcher.NoteMatcherListener;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -40,7 +51,7 @@ public class MidguitarSettings extends JPanel {
     MidguitarSettings(final MidiDevices deviceProvider, final NoteMatcherListener noteListener) {
         this.noteListener = noteListener;
 
-        final Dimension minimumSize = new Dimension(500, 460);
+        final Dimension minimumSize = new Dimension(640, 460);
         setMinimumSize(minimumSize);
         setPreferredSize(minimumSize);
         setBorder(new LineBorder(Color.BLACK, 2));
@@ -52,6 +63,8 @@ public class MidguitarSettings extends JPanel {
         jPanel.add(createPanel(chkEnableOutput, modelOuput, deviceProvider::getSynthesizers));
         jPanel.add(createConfig());
         jPanel.add(createStart());
+        jPanel.add(Box.createVerticalStrut(130));
+        jPanel.add(new NoteTable());
     }
 
     private Component createStart() {
@@ -72,8 +85,9 @@ public class MidguitarSettings extends JPanel {
                     selectedItem.open();
                 }
 
-                final int from = Notes.getNoteNames().indexOf(fromModel.getSelectedItem());
-                final int to = Notes.getNoteNames().indexOf(toModel.getSelectedItem());
+                final List<String> allNotes = Notes.getNoteNames();
+                final int from = allNotes.indexOf(fromModel.getSelectedItem());
+                final int to = allNotes.indexOf(toModel.getSelectedItem());
 
                 final NoteMatcher noteMatcher = new NoteMatcher(from, to, chkIncludeSharp.isSelected());
                 noteMatcher.addNoteMatchListener(noteListener);
@@ -89,10 +103,23 @@ public class MidguitarSettings extends JPanel {
         return jPanel;
     }
 
+    private void adjust(final DefaultComboBoxModel<String> model) {
+        final Object selectedItem = model.getSelectedItem();
+        model.removeAllElements();
+        Notes.getSupportedNoteNames(chkIncludeSharp.isSelected()).forEach(model::addElement);
+        model.setSelectedItem(selectedItem);
+    }
+
     private JPanel createConfig() {
         final JPanel noteControl = new JPanel();
         noteControl.setLayout(new BoxLayout(noteControl, BoxLayout.X_AXIS));
         noteControl.add(chkIncludeSharp);
+        chkIncludeSharp.addActionListener(e -> {
+            adjust(fromModel);
+            adjust(toModel);
+        });
+        adjust(fromModel);
+        adjust(toModel);
         noteControl.add(new JLabel("   From   "));
         noteControl.add(new JComboBox<>(fromModel));
         noteControl.add(new JLabel("   To   "));
