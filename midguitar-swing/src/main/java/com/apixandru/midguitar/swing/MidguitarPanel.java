@@ -3,9 +3,14 @@ package com.apixandru.midguitar.swing;
 import com.apixandru.midguitar.model.Notes;
 import com.apixandru.midguitar.model.matcher.NoteMatcherListener;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.image.BufferedImage;
 
 /**

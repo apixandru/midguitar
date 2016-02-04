@@ -3,9 +3,11 @@ package com.apixandru.midguitar.swing;
 import com.apixandru.midguitar.model.MidiDevices;
 
 import javax.sound.midi.MidiUnavailableException;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.GridBagLayout;
 
 /**
  * @author Alexandru-Constantin Bledea

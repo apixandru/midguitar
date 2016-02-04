@@ -13,6 +13,7 @@ public final class Notes {
 
     public static final List<String> ALL_NOTE_NAMES;
     public static final List<String> BASE_NOTE_NAMES;
+    public static final int NOTES_IN_OCTAVE = 12;
 
     static {
         final List<String> noteNames = new ArrayList<>(128);
@@ -44,6 +45,14 @@ public final class Notes {
      */
     public static String getNoteNameWithOctave(final int noteNumber) {
         return ALL_NOTE_NAMES.get(noteNumber);
+    }
+
+    /**
+     * @param noteNumber the note number
+     * @return the octave
+     */
+    public static int getOctave(final int noteNumber) {
+        return noteNumber / NOTES_IN_OCTAVE - 1;
     }
 
     /**

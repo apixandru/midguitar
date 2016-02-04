@@ -1,8 +1,10 @@
 package com.apixandru.midguitar.swing;
 
 import javax.sound.midi.MidiDevice;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import java.awt.Component;
 
 /**
  * @author Alexandru-Constantin Bledea
