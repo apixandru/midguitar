@@ -45,6 +45,14 @@ public final class Notes {
     }
 
     /**
+     * @param noteNumber the note number
+     * @return the first note in the octave
+     */
+    public static int getFirstNoteInOctave(final int noteNumber) {
+        return (getOctave(noteNumber) + 1) * NOTES_IN_OCTAVE;
+    }
+
+    /**
      * @param noteNumber the note number from the midi input
      * @return the note name with octave
      */
