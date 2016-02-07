@@ -48,6 +48,13 @@ public final class NoteMatcher implements NoteListener {
     }
 
     /**
+     * @param listener listener
+     */
+    public void removeNoteMatchListener(final NoteMatcherListener listener) {
+        this.listeners.remove(listener);
+    }
+
+    /**
      * @return
      */
     public List<Integer> getAllNotes() {

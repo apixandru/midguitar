@@ -47,6 +47,7 @@ public class MidguitarSettings extends JPanel {
     private MidiInput input;
     private final NoteMatcherListener noteListener;
     private final NoteTable noteTable = new NoteTable();
+    private NoteMatcher noteMatcher;
 
     MidguitarSettings(final MidiDevices deviceProvider, final NoteMatcherListener noteListener) {
         this.noteListener = noteListener;
@@ -90,7 +91,11 @@ public class MidguitarSettings extends JPanel {
                 final int from = allNotes.indexOf(fromModel.getSelectedItem());
                 final int to = allNotes.indexOf(toModel.getSelectedItem());
 
-                final NoteMatcher noteMatcher = new NoteMatcher(from, to, chkIncludeSharp.isSelected());
+                if (null != noteMatcher) {
+                    noteMatcher.removeNoteMatchListener(noteListener);
+                    noteMatcher.removeNoteMatchListener(noteTable);
+                }
+                noteMatcher = new NoteMatcher(from, to, chkIncludeSharp.isSelected());
                 noteMatcher.addNoteMatchListener(noteListener);
                 noteMatcher.addNoteMatchListener(noteTable);
                 noteTable.configure(noteMatcher.getAllNotes());
