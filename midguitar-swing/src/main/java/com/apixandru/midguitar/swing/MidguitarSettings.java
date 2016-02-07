@@ -90,10 +90,10 @@ public class MidguitarSettings extends JPanel {
                 final int from = allNotes.indexOf(fromModel.getSelectedItem());
                 final int to = allNotes.indexOf(toModel.getSelectedItem());
 
-                noteTable.configure(from, to);
                 final NoteMatcher noteMatcher = new NoteMatcher(from, to, chkIncludeSharp.isSelected());
                 noteMatcher.addNoteMatchListener(noteListener);
                 noteMatcher.addNoteMatchListener(noteTable);
+                noteTable.configure(noteMatcher.getAllNotes());
                 input.addListener(noteMatcher);
 
 

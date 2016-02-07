@@ -47,6 +47,13 @@ public final class NoteMatcher implements NoteListener {
         listener.newNote(noteExpected);
     }
 
+    /**
+     * @return
+     */
+    public List<Integer> getAllNotes() {
+        return noteGenerator.getAllNotes();
+    }
+
 }
 
 

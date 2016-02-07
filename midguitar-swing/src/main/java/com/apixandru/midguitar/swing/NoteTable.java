@@ -46,11 +46,9 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
 
     private final List<NoteListener> listeners = new ArrayList<>();
 
-    private int from;
-    private int to;
-
     private final Map<Integer, Integer> actualCorrectNotes = new HashMap<>();
     private final Map<Integer, Integer> actualWrongNotes = new HashMap<>();
+    private final List<Integer> allNotes = new ArrayList<>();
 
     /**
      *
@@ -131,9 +129,10 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
                 });
     }
 
-    public void configure(final int from, final int to) {
-        this.from = from;
-        this.to = to;
+    public void configure(final List<Integer> allNotes) {
+        this.allNotes.clear();
+        this.allNotes.addAll(allNotes);
+
         actualCorrectNotes.clear();
         actualWrongNotes.clear();
 
@@ -142,11 +141,7 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
             if (null == noteLabel) {
                 continue;
             }
-            if (noteNumber >= from && noteNumber <= to) {
-                noteLabel.setBorder(ACTIVE_BORDER);
-            } else {
-                noteLabel.setBorder(INACTIVE_BORDER);
-            }
+            noteLabel.setBorder(this.allNotes.contains(noteNumber) ? ACTIVE_BORDER : INACTIVE_BORDER);
             clearLabel(noteLabel);
         }
     }
@@ -189,7 +184,7 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
 
     @Override
     public void noteGuessed(final int current, final int actual) {
-        if (actual < from || actual > to) {
+        if (!allNotes.contains(actual)) {
             return;
         }
         final boolean correct = current == actual;
