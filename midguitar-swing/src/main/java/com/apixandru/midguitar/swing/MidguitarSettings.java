@@ -2,7 +2,6 @@ package com.apixandru.midguitar.swing;
 
 import com.apixandru.midguitar.model.MidiDevices;
 import com.apixandru.midguitar.model.MidiInput;
-import com.apixandru.midguitar.model.MidiInputRealDevice;
 import com.apixandru.midguitar.model.Notes;
 import com.apixandru.midguitar.model.SynthNoteListener;
 import com.apixandru.midguitar.model.matcher.NoteMatcher;
@@ -47,6 +46,7 @@ public class MidguitarSettings extends JPanel {
 
     private MidiInput input;
     private final NoteMatcherListener noteListener;
+    private final NoteTable noteTable = new NoteTable();
 
     MidguitarSettings(final MidiDevices deviceProvider, final NoteMatcherListener noteListener) {
         this.noteListener = noteListener;
@@ -64,7 +64,6 @@ public class MidguitarSettings extends JPanel {
         jPanel.add(createConfig());
         jPanel.add(createStart());
         jPanel.add(Box.createVerticalStrut(128));
-        final NoteTable noteTable = new NoteTable();
         jPanel.add(noteTable);
         modelInput.addElement(noteTable);
     }
@@ -91,6 +90,7 @@ public class MidguitarSettings extends JPanel {
                 final int from = allNotes.indexOf(fromModel.getSelectedItem());
                 final int to = allNotes.indexOf(toModel.getSelectedItem());
 
+                noteTable.configure(from, to);
                 final NoteMatcher noteMatcher = new NoteMatcher(from, to, chkIncludeSharp.isSelected());
                 noteMatcher.addNoteMatchListener(noteListener);
                 input.addListener(noteMatcher);

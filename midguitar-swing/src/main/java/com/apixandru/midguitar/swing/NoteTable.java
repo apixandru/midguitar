@@ -9,6 +9,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -30,6 +31,14 @@ import java.util.Map;
  */
 public class NoteTable extends JPanel implements MidiInput {
 
+    private static final Border ACTIVE_BORDER = new CompoundBorder(
+            new LineBorder(Color.LIGHT_GRAY, 1),
+            new EmptyBorder(new Insets(5, 5, 5, 5)));
+
+    private static final Border INACTIVE_BORDER = new CompoundBorder(
+            new LineBorder(new JLabel().getBackground(), 1),
+            new EmptyBorder(new Insets(5, 5, 5, 5)));
+
     private final List<JLabel> noteLabels;
     private final Map<String, JLabel> octaveLabels = new HashMap<>();
     private final Map<String, JLabel> noteHeaderLabels = new HashMap<>();
@@ -44,6 +53,8 @@ public class NoteTable extends JPanel implements MidiInput {
         setLayout(new GridLayout(0, Notes.BASE_NOTE_NAMES.size() + 1));
         addHeader();
         addOctavesAndNotes();
+        // some empty space that will allow the motion  listener to know
+        // that we exited the notes and octaves zone
         add(new JPanel());
         final NoteTableMouseListener listener = new NoteTableMouseListener();
         addMouseListener(listener);
@@ -55,14 +66,12 @@ public class NoteTable extends JPanel implements MidiInput {
      */
     private List<JLabel> createLabels() {
         final List<JLabel> noteLabels = new ArrayList<>(Notes.ALL_NOTE_NAMES.size());
-        Insets buttonMargin = new Insets(5, 5, 5, 5);
-        final CompoundBorder border = new CompoundBorder(new LineBorder(Color.lightGray, 1), new EmptyBorder(buttonMargin));
         for (int i = 0, to = Notes.ALL_NOTE_NAMES.size(); i < to; i++) {
             final JLabel noteLabel;
             if (i >= Notes.SUPPORTED_NOTE_FIRST && i <= Notes.SUPPORTED_NOTE_LAST) {
                 noteLabel = new JLabel();
-                noteLabel.setBorder(border);
-                noteLabel.setText(i + "%");
+                noteLabel.setBorder(INACTIVE_BORDER);
+                noteLabel.setText(" ");
                 noteLabel.setHorizontalAlignment(SwingConstants.RIGHT);
             } else {
                 noteLabel = null;
@@ -77,11 +86,11 @@ public class NoteTable extends JPanel implements MidiInput {
      *
      */
     private void addOctavesAndNotes() {
-        final int numBasicNotes = Notes.BASE_NOTE_NAMES.size();
+        final int numBasicNotes = Notes.NOTES_IN_OCTAVE;
 
 //        +1 to convert to index
         final int firstNote = Notes.getFirstNoteInOctave(Notes.SUPPORTED_NOTE_FIRST);
-        final int lastNote = Math.min((Notes.getOctave(Notes.SUPPORTED_NOTE_LAST) + 2) * 12, Notes.ALL_NOTE_NAMES.size());
+        final int lastNote = Math.min((Notes.getOctave(Notes.SUPPORTED_NOTE_LAST) + 2) * Notes.NOTES_IN_OCTAVE, Notes.ALL_NOTE_NAMES.size());
 
         for (int i = firstNote; i < lastNote; i++) {
             if (i % numBasicNotes == 0) {
@@ -115,6 +124,27 @@ public class NoteTable extends JPanel implements MidiInput {
                 });
     }
 
+    public void configure(final int from, final int to) {
+        for (int noteNumber = 0; noteNumber < noteLabels.size(); noteNumber++) {
+            final JLabel noteLabel = noteLabels.get(noteNumber);
+            if (null == noteLabel) {
+                continue;
+            }
+            if (noteNumber >= from && noteNumber <= to) {
+                noteLabel.setBorder(ACTIVE_BORDER);
+            } else {
+                noteLabel.setBorder(INACTIVE_BORDER);
+            }
+            clearLabel(noteLabel);
+        }
+    }
+
+    /**
+     * @param label
+     */
+    private static void clearLabel(JLabel label) {
+        label.setText(" ");
+    }
 
     @Override
     public void open() throws MidiUnavailableException {
@@ -140,7 +170,6 @@ public class NoteTable extends JPanel implements MidiInput {
     public String getName() {
         return "Note Table";
     }
-
 
     private class NoteTableMouseListener extends MouseAdapter {
 
