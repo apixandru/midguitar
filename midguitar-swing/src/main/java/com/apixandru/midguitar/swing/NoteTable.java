@@ -188,13 +188,36 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
     }
 
     @Override
-    public void noteGuessed(final int expected, final int actual) {
-        if (expected < from || expected > to) {
+    public void noteGuessed(final int current, final int actual) {
+        if (actual < from || actual > to) {
             return;
         }
-        final Map<Integer, Integer> map = expected == actual ? actualCorrectNotes : actualWrongNotes;
-        map.put(expected, getInt(expected, map) + 1);
-        System.out.println(map);
+        final boolean correct = current == actual;
+
+        int correctTimes = getInt(actual, actualCorrectNotes);
+        int wrongTimes = getInt(actual, actualWrongNotes);
+
+        if (correct) {
+            correctTimes++;
+            actualCorrectNotes.put(actual, correctTimes);
+        } else {
+            wrongTimes++;
+            actualWrongNotes.put(actual, wrongTimes);
+        }
+
+        final JLabel noteLabel = this.noteLabels.get(actual);
+        if (0 == wrongTimes) {
+            noteLabel.setText("100%");
+            return;
+        }
+        if (0 == correctTimes) {
+            noteLabel.setText("0%");
+            return;
+        }
+
+        final int total = wrongTimes + correctTimes;
+        final int currentPercent = correctTimes * 100 / total;
+        noteLabel.setText(currentPercent + "%");
     }
 
     /**
