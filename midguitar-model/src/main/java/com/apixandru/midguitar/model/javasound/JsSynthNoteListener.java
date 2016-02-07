@@ -1,4 +1,6 @@
-package com.apixandru.midguitar.model;
+package com.apixandru.midguitar.model.javasound;
+
+import com.apixandru.midguitar.model.NoteListener;
 
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.Synthesizer;
@@ -9,7 +11,7 @@ import java.util.Objects;
  * @author Alexandru-Constantin Bledea
  * @since January 24, 2016
  */
-public final class SynthNoteListener implements NoteListener, AutoCloseable {
+public final class JsSynthNoteListener implements NoteListener, AutoCloseable {
 
     private final Synthesizer synthesizer;
     private final MidiChannel midiChannel;
@@ -17,7 +19,7 @@ public final class SynthNoteListener implements NoteListener, AutoCloseable {
     /**
      * @param synthesizer the synthesizer
      */
-    public SynthNoteListener(final Synthesizer synthesizer) {
+    public JsSynthNoteListener(final Synthesizer synthesizer) {
         this.synthesizer = synthesizer;
         this.midiChannel = Arrays.stream(this.synthesizer.getChannels())
                 .filter(Objects::nonNull)

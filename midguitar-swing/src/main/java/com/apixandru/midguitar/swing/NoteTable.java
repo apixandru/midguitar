@@ -160,7 +160,7 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
 
     @Override
     public void close() throws MidiUnavailableException {
-
+        this.listeners.clear();
     }
 
     @Override

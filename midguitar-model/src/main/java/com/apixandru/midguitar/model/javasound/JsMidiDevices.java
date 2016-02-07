@@ -1,4 +1,6 @@
-package com.apixandru.midguitar.model;
+package com.apixandru.midguitar.model.javasound;
+
+import com.apixandru.midguitar.model.MidiInput;
 
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
@@ -13,7 +15,7 @@ import java.util.stream.Stream;
  * @author Alexandru-Constantin Bledea
  * @since January 24, 2016
  */
-public class MidiDevices {
+public class JsMidiDevices {
 
     /**
      * @return the midi devices
@@ -46,7 +48,7 @@ public class MidiDevices {
     public List<MidiInput> getInputDevices() throws MidiUnavailableException {
         return getDevices()
                 .filter(dev -> 0 != dev.getMaxTransmitters())
-                .map(MidiInputRealDevice::new)
+                .map(JsMidiDevice::new)
                 .collect(Collectors.toList());
     }
 

@@ -1,4 +1,6 @@
-package com.apixandru.midguitar.model;
+package com.apixandru.midguitar.model.javasound;
+
+import com.apixandru.midguitar.model.NoteListener;
 
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
@@ -10,7 +12,7 @@ import java.util.List;
  * @author Alexandru-Constantin Bledea
  * @since January 24, 2016
  */
-final class MidiMessageReceiver implements Receiver {
+final class JsMidiMessageReceiver implements Receiver {
 
     private final List<NoteListener> listeners = new ArrayList<>();
 
@@ -29,6 +31,7 @@ final class MidiMessageReceiver implements Receiver {
 
     @Override
     public void close() {
+        this.listeners.clear();
     }
 
     /**

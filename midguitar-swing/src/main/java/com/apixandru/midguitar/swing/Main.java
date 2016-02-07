@@ -1,6 +1,6 @@
 package com.apixandru.midguitar.swing;
 
-import com.apixandru.midguitar.model.MidiDevices;
+import com.apixandru.midguitar.model.javasound.JsMidiDevices;
 
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JFrame;
@@ -24,7 +24,7 @@ public final class Main {
         contentPane.setLayout(new GridBagLayout());
         final MidguitarPanel panel = new MidguitarPanel();
         midguitar.add(panel);
-        midguitar.add(new MidguitarSettings(new MidiDevices(), panel));
+        midguitar.add(new MidguitarSettings(new JsMidiDevices(), panel));
         midguitar.pack();
         midguitar.setLocationRelativeTo(null);
         midguitar.setVisible(true);

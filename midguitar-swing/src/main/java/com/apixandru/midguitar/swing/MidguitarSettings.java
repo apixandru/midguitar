@@ -1,9 +1,9 @@
 package com.apixandru.midguitar.swing;
 
-import com.apixandru.midguitar.model.MidiDevices;
 import com.apixandru.midguitar.model.MidiInput;
 import com.apixandru.midguitar.model.Notes;
-import com.apixandru.midguitar.model.SynthNoteListener;
+import com.apixandru.midguitar.model.javasound.JsMidiDevices;
+import com.apixandru.midguitar.model.javasound.JsSynthNoteListener;
 import com.apixandru.midguitar.model.matcher.NoteMatcher;
 import com.apixandru.midguitar.model.matcher.NoteMatcherListener;
 
@@ -49,7 +49,7 @@ public class MidguitarSettings extends JPanel {
     private final NoteTable noteTable = new NoteTable();
     private NoteMatcher noteMatcher;
 
-    MidguitarSettings(final MidiDevices deviceProvider, final NoteMatcherListener noteListener) {
+    MidguitarSettings(final JsMidiDevices deviceProvider, final NoteMatcherListener noteListener) {
         this.noteListener = noteListener;
 
         final Dimension minimumSize = new Dimension(640, 460);
@@ -83,7 +83,7 @@ public class MidguitarSettings extends JPanel {
                 input = (MidiInput) modelInput.getSelectedItem();
                 if (chkEnableOutput.isSelected()) {
                     final Synthesizer selectedItem = (Synthesizer) modelOuput.getSelectedItem();
-                    this.input.addListener(new SynthNoteListener(selectedItem));
+                    this.input.addListener(new JsSynthNoteListener(selectedItem));
                     selectedItem.open();
                 }
 
@@ -91,10 +91,6 @@ public class MidguitarSettings extends JPanel {
                 final int from = allNotes.indexOf(fromModel.getSelectedItem());
                 final int to = allNotes.indexOf(toModel.getSelectedItem());
 
-                if (null != noteMatcher) {
-                    noteMatcher.removeNoteMatchListener(noteListener);
-                    noteMatcher.removeNoteMatchListener(noteTable);
-                }
                 noteMatcher = new NoteMatcher(from, to, chkIncludeSharp.isSelected());
                 noteMatcher.addNoteMatchListener(noteListener);
                 noteMatcher.addNoteMatchListener(noteTable);
