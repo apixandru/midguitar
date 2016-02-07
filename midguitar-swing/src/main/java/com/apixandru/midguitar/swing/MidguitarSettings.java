@@ -6,6 +6,7 @@ import com.apixandru.midguitar.model.javasound.JsMidiDevices;
 import com.apixandru.midguitar.model.javasound.JsSynthNoteListener;
 import com.apixandru.midguitar.model.matcher.NoteMatcher;
 import com.apixandru.midguitar.model.matcher.NoteMatcherListener;
+import com.apixandru.utils.swing.components.AxComboBox;
 
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiUnavailableException;
@@ -37,8 +38,8 @@ public class MidguitarSettings extends JPanel {
     private final DefaultComboBoxModel<MidiInput> modelInput = new DefaultComboBoxModel<>();
     private final DefaultComboBoxModel<MidiDevice> modelOuput = new DefaultComboBoxModel<>();
 
-    private final DefaultComboBoxModel<String> fromModel = newModel(40);
-    private final DefaultComboBoxModel<String> toModel = newModel(86);
+    private final AxComboBox<String> cmbFrom = new AxComboBox<>(this, "cmbFrom");
+    private final AxComboBox<String> cmbTo = new AxComboBox<>(this, "cmbTo");
 
     private final JCheckBox chkEnableOutput = new JCheckBox("Enable Output");
 
@@ -88,8 +89,8 @@ public class MidguitarSettings extends JPanel {
                 }
 
                 final List<String> allNotes = Notes.getNoteNames();
-                final int from = allNotes.indexOf(fromModel.getSelectedItem());
-                final int to = allNotes.indexOf(toModel.getSelectedItem());
+                final int from = allNotes.indexOf(cmbFrom.getSelectedItem());
+                final int to = allNotes.indexOf(cmbTo.getSelectedItem());
 
                 noteMatcher = new NoteMatcher(from, to, chkIncludeSharp.isSelected());
                 noteMatcher.addNoteMatchListener(noteListener);
@@ -107,11 +108,9 @@ public class MidguitarSettings extends JPanel {
         return jPanel;
     }
 
-    private void adjust(final DefaultComboBoxModel<String> model) {
-        final Object selectedItem = model.getSelectedItem();
-        model.removeAllElements();
-        Notes.getSupportedNoteNames(chkIncludeSharp.isSelected()).forEach(model::addElement);
-        model.setSelectedItem(selectedItem);
+    private void adjust(final AxComboBox<String> model) {
+        final boolean includeSharpNotes = chkIncludeSharp.isSelected();
+        model.setup(Notes.getSupportedNoteNames(includeSharpNotes));
     }
 
     private JPanel createConfig() {
@@ -119,29 +118,18 @@ public class MidguitarSettings extends JPanel {
         noteControl.setLayout(new BoxLayout(noteControl, BoxLayout.X_AXIS));
         noteControl.add(chkIncludeSharp);
         chkIncludeSharp.addActionListener(e -> {
-            adjust(fromModel);
-            adjust(toModel);
+            adjust(cmbFrom);
+            adjust(cmbTo);
         });
-        adjust(fromModel);
-        adjust(toModel);
+        adjust(cmbFrom);
+        adjust(cmbTo);
         noteControl.add(new JLabel("   From   "));
-        noteControl.add(new JComboBox<>(fromModel));
+        noteControl.add(cmbFrom);
         noteControl.add(new JLabel("   To   "));
-        noteControl.add(new JComboBox<>(toModel));
+        noteControl.add(cmbTo);
         noteControl.add(Box.createHorizontalStrut(88));
         noteControl.setBorder(new EmptyBorder(5, 5, 5, 5));
         return noteControl;
-    }
-
-    /**
-     * @param note
-     * @return
-     */
-    private static DefaultComboBoxModel<String> newModel(final int note) {
-        final String[] notes = Notes.getNoteNames().toArray(new String[128]);
-        final DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(notes);
-        model.setSelectedItem(notes[note]);
-        return model;
     }
 
     /**
