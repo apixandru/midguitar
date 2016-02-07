@@ -52,4 +52,16 @@
         </plugins>
     </build>
 
+    <repositories>
+
+        <!--
+            This repository only hold compiled projects from https://github.com/apixandru
+        -->
+        <repository>
+            <id>apixandru-snapshots</id>
+            <url>http://maven.vampirefox.com</url>
+        </repository>
+
+    </repositories>
+
 </project>
