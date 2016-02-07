@@ -1,5 +1,8 @@
 package com.apixandru.midguitar.model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -14,6 +17,9 @@ public final class NoteGenerator {
     private final int step;
     private final boolean includeSharpNotes;
 
+    private final List<Integer> allNotes;
+    private final int size;
+
     /**
      * @param from
      * @param to
@@ -23,17 +29,26 @@ public final class NoteGenerator {
         this.from = from;
         this.step = to - from + 1;
         this.includeSharpNotes = includeSharpNotes;
+
+        final List<Integer> notes = new ArrayList<>();
+        for (int i = from; i <= to; i++) {
+            if (includeSharpNotes || !Notes.isSharp(i)) {
+                notes.add(i);
+            }
+        }
+        size = notes.size();
+        this.allNotes = Collections.unmodifiableList(notes);
     }
 
     /**
      * @return
      */
     public int nextNote() {
-        int nextNote;
-        do {
-            nextNote = random.nextInt(step) + from;
-        } while (!includeSharpNotes && Notes.isSharp(nextNote));
-        return nextNote;
+        return allNotes.get(random.nextInt(size));
+    }
+
+    public List<Integer> getAllNotes() {
+        return allNotes;
     }
 
 }
