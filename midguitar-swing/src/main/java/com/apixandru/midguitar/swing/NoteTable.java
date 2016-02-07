@@ -3,6 +3,7 @@ package com.apixandru.midguitar.swing;
 import com.apixandru.midguitar.model.MidiInput;
 import com.apixandru.midguitar.model.NoteListener;
 import com.apixandru.midguitar.model.Notes;
+import com.apixandru.midguitar.model.matcher.NoteMatcherListener;
 
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JComponent;
@@ -29,7 +30,7 @@ import java.util.Map;
  * @author Alexandru-Constantin Bledea
  * @since February 03, 2016
  */
-public class NoteTable extends JPanel implements MidiInput {
+public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener {
 
     private static final Border ACTIVE_BORDER = new CompoundBorder(
             new LineBorder(Color.LIGHT_GRAY, 1),
@@ -44,6 +45,12 @@ public class NoteTable extends JPanel implements MidiInput {
     private final Map<String, JLabel> noteHeaderLabels = new HashMap<>();
 
     private final List<NoteListener> listeners = new ArrayList<>();
+
+    private int from;
+    private int to;
+
+    private final Map<Integer, Integer> actualCorrectNotes = new HashMap<>();
+    private final Map<Integer, Integer> actualWrongNotes = new HashMap<>();
 
     /**
      *
@@ -125,6 +132,11 @@ public class NoteTable extends JPanel implements MidiInput {
     }
 
     public void configure(final int from, final int to) {
+        this.from = from;
+        this.to = to;
+        actualCorrectNotes.clear();
+        actualWrongNotes.clear();
+
         for (int noteNumber = 0; noteNumber < noteLabels.size(); noteNumber++) {
             final JLabel noteLabel = noteLabels.get(noteNumber);
             if (null == noteLabel) {
@@ -169,6 +181,32 @@ public class NoteTable extends JPanel implements MidiInput {
     @Override
     public String getName() {
         return "Note Table";
+    }
+
+    @Override
+    public void newNote(final int noteNumber) {
+    }
+
+    @Override
+    public void noteGuessed(final int expected, final int actual) {
+        if (expected < from || expected > to) {
+            return;
+        }
+        final Map<Integer, Integer> map = expected == actual ? actualCorrectNotes : actualWrongNotes;
+        map.put(expected, getInt(expected, map) + 1);
+        System.out.println(map);
+    }
+
+    /**
+     * @param expected
+     * @return
+     */
+    private static int getInt(final int expected, final Map<Integer, Integer> map) {
+        Integer integer = map.get(expected);
+        if (null == integer) {
+            integer = 0;
+        }
+        return integer;
     }
 
     private class NoteTableMouseListener extends MouseAdapter {
