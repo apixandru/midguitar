@@ -1,11 +1,11 @@
 package com.apixandru.midguitar.swing;
 
 import com.apixandru.midguitar.model.Notes;
-import com.apixandru.utils.midi.javasound.JsMidiDevices;
-import com.apixandru.utils.midi.javasound.JsSynthNoteListener;
 import com.apixandru.midguitar.model.matcher.NoteMatcher;
 import com.apixandru.midguitar.model.matcher.NoteMatcherListener;
 import com.apixandru.utils.midi.MidiInput;
+import com.apixandru.utils.midi.javasound.JsMidiDevices;
+import com.apixandru.utils.midi.javasound.JsSynthNoteListener;
 import com.apixandru.utils.swing.components.AxComboBox;
 
 import javax.sound.midi.MidiDevice;
