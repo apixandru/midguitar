@@ -1,6 +1,6 @@
 package com.apixandru.midguitar.model.javasound;
 
-import com.apixandru.midguitar.model.NoteListener;
+import com.apixandru.utils.midi.NoteListener;
 
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;

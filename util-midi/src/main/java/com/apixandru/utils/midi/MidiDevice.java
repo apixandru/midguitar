@@ -1,10 +1,10 @@
-package com.apixandru.midguitar.model;
+package com.apixandru.utils.midi;
 
 /**
  * @author Alexandru-Constantin Bledea
  * @since February 04, 2016
  */
-public interface NamedDevice {
+public interface MidiDevice {
 
     /**
      * @return the device name

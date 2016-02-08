@@ -1,4 +1,4 @@
-package com.apixandru.midguitar.model;
+package com.apixandru.utils.midi;
 
 import javax.sound.midi.MidiUnavailableException;
 
@@ -6,7 +6,7 @@ import javax.sound.midi.MidiUnavailableException;
  * @author Alexandru-Constantin Bledea
  * @since January 30, 2016
  */
-public interface MidiInput extends NamedDevice {
+public interface MidiInput extends MidiDevice {
 
     /**
      * @throws MidiUnavailableException

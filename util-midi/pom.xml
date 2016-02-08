@@ -6,18 +6,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.apixandru.midguitar</groupId>
         <artifactId>midguitar</artifactId>
+        <groupId>com.apixandru.midguitar</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>midguitar-model</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>util-midi</artifactId>
-        </dependency>
-    </dependencies>
+    <artifactId>util-midi</artifactId>
 
 </project>

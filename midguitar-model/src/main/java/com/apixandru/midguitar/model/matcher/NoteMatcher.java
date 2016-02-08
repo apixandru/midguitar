@@ -1,7 +1,7 @@
 package com.apixandru.midguitar.model.matcher;
 
 import com.apixandru.midguitar.model.NoteGenerator;
-import com.apixandru.midguitar.model.NoteListener;
+import com.apixandru.utils.midi.NoteListener;
 
 import java.util.ArrayList;
 import java.util.List;

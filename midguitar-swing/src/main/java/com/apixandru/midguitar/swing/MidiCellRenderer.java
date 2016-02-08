@@ -1,7 +1,5 @@
 package com.apixandru.midguitar.swing;
 
-import com.apixandru.midguitar.model.NamedDevice;
-
 import javax.sound.midi.MidiDevice;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
@@ -27,8 +25,8 @@ final class MidiCellRenderer extends DefaultListCellRenderer {
             ((JLabel) component).setText(description);
 
         }
-        if (value instanceof NamedDevice && component instanceof JLabel) {
-            final String deviceName = ((NamedDevice) value).getName();
+        if (value instanceof com.apixandru.utils.midi.MidiDevice && component instanceof JLabel) {
+            final String deviceName = ((com.apixandru.utils.midi.MidiDevice) value).getName();
             ((JLabel) component).setText(deviceName);
         }
         return component;

@@ -1,11 +1,11 @@
 package com.apixandru.midguitar.swing;
 
-import com.apixandru.midguitar.model.MidiInput;
 import com.apixandru.midguitar.model.Notes;
 import com.apixandru.midguitar.model.javasound.JsMidiDevices;
 import com.apixandru.midguitar.model.javasound.JsSynthNoteListener;
 import com.apixandru.midguitar.model.matcher.NoteMatcher;
 import com.apixandru.midguitar.model.matcher.NoteMatcherListener;
+import com.apixandru.utils.midi.MidiInput;
 import com.apixandru.utils.swing.components.AxComboBox;
 
 import javax.sound.midi.MidiDevice;
@@ -35,6 +35,7 @@ import java.util.concurrent.Callable;
  */
 public class MidguitarSettings extends JPanel {
 
+    //    private final AxComboBox<MidiInput> modelInput = new AxComboBox<>(this, "modelInput");
     private final DefaultComboBoxModel<MidiInput> modelInput = new DefaultComboBoxModel<>();
     private final DefaultComboBoxModel<MidiDevice> modelOuput = new DefaultComboBoxModel<>();
 

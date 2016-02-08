@@ -1,9 +1,9 @@
 package com.apixandru.midguitar.swing;
 
-import com.apixandru.midguitar.model.MidiInput;
-import com.apixandru.midguitar.model.NoteListener;
 import com.apixandru.midguitar.model.Notes;
 import com.apixandru.midguitar.model.matcher.NoteMatcherListener;
+import com.apixandru.utils.midi.MidiInput;
+import com.apixandru.utils.midi.NoteListener;
 
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JComponent;

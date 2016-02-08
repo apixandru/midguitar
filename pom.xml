@@ -13,6 +13,7 @@
     <modules>
         <module>midguitar-model</module>
         <module>midguitar-swing</module>
+        <module>util-midi</module>
     </modules>
 
     <dependencyManagement>
@@ -20,6 +21,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>midguitar-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>util-midi</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

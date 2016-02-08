@@ -13,10 +13,6 @@ public final class NoteGenerator {
 
     private final Random random = new Random();
 
-    private final int from;
-    private final int step;
-    private final boolean includeSharpNotes;
-
     private final List<Integer> allNotes;
     private final int size;
 
@@ -26,10 +22,6 @@ public final class NoteGenerator {
      * @param includeSharpNotes
      */
     public NoteGenerator(final int from, final int to, final boolean includeSharpNotes) {
-        this.from = from;
-        this.step = to - from + 1;
-        this.includeSharpNotes = includeSharpNotes;
-
         final List<Integer> notes = new ArrayList<>();
         for (int i = from; i <= to; i++) {
             if (includeSharpNotes || !Notes.isSharp(i)) {

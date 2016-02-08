@@ -1,4 +1,4 @@
-package com.apixandru.midguitar.model;
+package com.apixandru.utils.midi;
 
 /**
  * @author Alexandru-Constantin Bledea

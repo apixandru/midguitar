@@ -1,7 +1,7 @@
 package com.apixandru.midguitar.model.javasound;
 
-import com.apixandru.midguitar.model.MidiInput;
-import com.apixandru.midguitar.model.NoteListener;
+import com.apixandru.utils.midi.MidiInput;
+import com.apixandru.utils.midi.NoteListener;
 
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiUnavailableException;
