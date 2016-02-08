@@ -70,15 +70,6 @@ public final class Notes {
 
     /**
      * @param noteNumber the midi note number
-     * @return the base note
-     */
-    private static BaseNote getBaseNote(final int noteNumber) {
-        ensureNoteInBounds(noteNumber);
-        return BaseNote.values()[noteNumber % BaseNote.values().length];
-    }
-
-    /**
-     * @param noteNumber the midi note number
      * @return if the note is sharp
      */
     public static boolean isSharp(final int noteNumber) {
@@ -113,13 +104,13 @@ public final class Notes {
      */
     private static int getFullNotesInBetween0(final int from, final int to) {
         int count = 0;
-        BaseNote lastNote = Notes.getBaseNote(from).getBaseNote();
+        char lastNote = getNoteNameWithOctave(from).charAt(0);
         for (int i = from; i <= to; i++) {
-            final BaseNote currentNote = Notes.getBaseNote(i);
-            if (currentNote.getBaseNote() != lastNote) {
+            final char currentNote = getNoteNameWithOctave(i).charAt(0);
+            if (currentNote != lastNote) {
                 count++;
             }
-            lastNote = currentNote.getBaseNote();
+            lastNote = currentNote;
         }
         return count;
     }
