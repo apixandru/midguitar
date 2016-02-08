@@ -1,4 +1,4 @@
-package com.apixandru.midguitar.model.javasound;
+package com.apixandru.utils.midi.javasound;
 
 import com.apixandru.utils.midi.MidiInput;
 

@@ -1,6 +1,6 @@
 package com.apixandru.midguitar.swing;
 
-import com.apixandru.midguitar.model.javasound.JsMidiDevices;
+import com.apixandru.utils.midi.javasound.JsMidiDevices;
 
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JFrame;
