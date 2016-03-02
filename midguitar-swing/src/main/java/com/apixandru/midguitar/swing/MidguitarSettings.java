@@ -46,10 +46,9 @@ public class MidguitarSettings extends JPanel {
     private final JCheckBox chkEnableOutput = new JCheckBox("Enable Output");
 
     private final JCheckBox chkIncludeSharp = new JCheckBox("Include sharp notes");
-
-    private MidiInput input;
     private final List<NoteMatcherListener> listeners = new ArrayList<>();
     private final NoteTable noteTable = new NoteTable();
+    private MidiInput input;
     private NoteMatcher noteMatcher;
 
     MidguitarSettings(final JsMidiDevices deviceProvider) {
@@ -69,6 +68,55 @@ public class MidguitarSettings extends JPanel {
         jPanel.add(Box.createVerticalStrut(128));
         jPanel.add(noteTable);
         modelInput.addElement(noteTable);
+    }
+
+    /**
+     * @param checkbox
+     * @param model
+     * @param deviceMethod
+     * @return
+     */
+    private static <T> JPanel createPanel(
+            final JCheckBox checkbox,
+            final DefaultComboBoxModel<T> model,
+            final Callable<List<? extends T>> deviceMethod) {
+
+        final JPanel jPanel = new JPanel();
+        jPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
+
+        if (null != checkbox) {
+            jPanel.add(checkbox);
+        }
+        final JComboBox<T> cmbOutput = new JComboBox<>(model);
+        cmbOutput.setRenderer(new MidiCellRenderer());
+
+        jPanel.add(cmbOutput);
+        jPanel.add(Box.createHorizontalStrut(5));
+        final JButton reload = new JButton("Rescan");
+        reload.addActionListener(e -> refreshSynthesizers(model, deviceMethod));
+        jPanel.add(reload);
+        refreshSynthesizers(model, deviceMethod);
+        return jPanel;
+    }
+
+    /**
+     * @param model
+     * @param deviceProvider
+     */
+    private static <T> void refreshSynthesizers(final DefaultComboBoxModel<T> model, final Callable<List<? extends T>> deviceProvider) {
+        try {
+            model.removeAllElements();
+            deviceProvider.call()
+                    .forEach(model::addElement);
+        } catch (final Exception e) {
+            e.printStackTrace();
+            error("Cannot reload devices");
+        }
+    }
+
+    private static void error(String message) {
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     private Component createStart() {
@@ -131,55 +179,6 @@ public class MidguitarSettings extends JPanel {
         noteControl.add(Box.createHorizontalStrut(88));
         noteControl.setBorder(new EmptyBorder(5, 5, 5, 5));
         return noteControl;
-    }
-
-    /**
-     * @param checkbox
-     * @param model
-     * @param deviceMethod
-     * @return
-     */
-    private static <T> JPanel createPanel(
-            final JCheckBox checkbox,
-            final DefaultComboBoxModel<T> model,
-            final Callable<List<? extends T>> deviceMethod) {
-
-        final JPanel jPanel = new JPanel();
-        jPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
-
-        if (null != checkbox) {
-            jPanel.add(checkbox);
-        }
-        final JComboBox<T> cmbOutput = new JComboBox<>(model);
-        cmbOutput.setRenderer(new MidiCellRenderer());
-
-        jPanel.add(cmbOutput);
-        jPanel.add(Box.createHorizontalStrut(5));
-        final JButton reload = new JButton("Rescan");
-        reload.addActionListener(e -> refreshSynthesizers(model, deviceMethod));
-        jPanel.add(reload);
-        refreshSynthesizers(model, deviceMethod);
-        return jPanel;
-    }
-
-    /**
-     * @param model
-     * @param deviceProvider
-     */
-    private static <T> void refreshSynthesizers(final DefaultComboBoxModel<T> model, final Callable<List<? extends T>> deviceProvider) {
-        try {
-            model.removeAllElements();
-            deviceProvider.call()
-                    .forEach(model::addElement);
-        } catch (final Exception e) {
-            e.printStackTrace();
-            error("Cannot reload devices");
-        }
-    }
-
-    private static void error(String message) {
-        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     public void addNoteMatcherListener(NoteMatcherListener listener) {
