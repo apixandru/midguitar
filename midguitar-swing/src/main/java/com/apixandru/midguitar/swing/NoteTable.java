@@ -67,6 +67,25 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
     }
 
     /**
+     * @param label
+     */
+    private static void clearLabel(JLabel label) {
+        label.setText(" ");
+    }
+
+    /**
+     * @param expected
+     * @return
+     */
+    private static int getInt(final int expected, final Map<Integer, Integer> map) {
+        Integer integer = map.get(expected);
+        if (null == integer) {
+            integer = 0;
+        }
+        return integer;
+    }
+
+    /**
      * @return
      */
     private List<JLabel> createLabels() {
@@ -146,13 +165,6 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
         }
     }
 
-    /**
-     * @param label
-     */
-    private static void clearLabel(JLabel label) {
-        label.setText(" ");
-    }
-
     @Override
     public void open() throws MidiUnavailableException {
 
@@ -213,18 +225,6 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
         final int total = wrongTimes + correctTimes;
         final int currentPercent = correctTimes * 100 / total;
         noteLabel.setText(currentPercent + "%");
-    }
-
-    /**
-     * @param expected
-     * @return
-     */
-    private static int getInt(final int expected, final Map<Integer, Integer> map) {
-        Integer integer = map.get(expected);
-        if (null == integer) {
-            integer = 0;
-        }
-        return integer;
     }
 
     private class NoteTableMouseListener extends MouseAdapter {

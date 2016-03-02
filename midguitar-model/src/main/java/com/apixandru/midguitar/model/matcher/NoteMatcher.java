@@ -13,10 +13,8 @@ import java.util.List;
 public final class NoteMatcher implements NoteListener {
 
     private final NoteGenerator noteGenerator;
-
-    private int noteExpected;
-
     private final List<NoteMatcherListener> listeners = new ArrayList<>();
+    private int noteExpected;
 
     public NoteMatcher(final int from, final int to, final boolean includeSharp) {
         this.noteGenerator = new NoteGenerator(from, to, includeSharp);

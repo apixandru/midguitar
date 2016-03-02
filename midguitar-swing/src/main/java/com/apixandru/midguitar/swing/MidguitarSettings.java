@@ -26,6 +26,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -47,12 +48,11 @@ public class MidguitarSettings extends JPanel {
     private final JCheckBox chkIncludeSharp = new JCheckBox("Include sharp notes");
 
     private MidiInput input;
-    private final NoteMatcherListener noteListener;
+    private final List<NoteMatcherListener> listeners = new ArrayList<>();
     private final NoteTable noteTable = new NoteTable();
     private NoteMatcher noteMatcher;
 
-    MidguitarSettings(final JsMidiDevices deviceProvider, final NoteMatcherListener noteListener) {
-        this.noteListener = noteListener;
+    MidguitarSettings(final JsMidiDevices deviceProvider) {
 
         final Dimension minimumSize = new Dimension(640, 460);
         setMinimumSize(minimumSize);
@@ -94,7 +94,7 @@ public class MidguitarSettings extends JPanel {
                 final int to = allNotes.indexOf(cmbTo.getSelectedItem());
 
                 noteMatcher = new NoteMatcher(from, to, chkIncludeSharp.isSelected());
-                noteMatcher.addNoteMatchListener(noteListener);
+                this.listeners.forEach(noteMatcher::addNoteMatchListener);
                 noteMatcher.addNoteMatchListener(noteTable);
                 noteTable.configure(noteMatcher.getAllNotes());
                 input.addListener(noteMatcher);
@@ -180,5 +180,9 @@ public class MidguitarSettings extends JPanel {
 
     private static void error(String message) {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void addNoteMatcherListener(NoteMatcherListener listener) {
+        this.listeners.add(listener);
     }
 }

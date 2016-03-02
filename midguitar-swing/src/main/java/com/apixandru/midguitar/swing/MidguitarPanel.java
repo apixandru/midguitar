@@ -28,12 +28,9 @@ public class MidguitarPanel extends JPanel implements NoteMatcherListener {
 
     private static final int POS_E2 = 420;
     private static final int NOTE_E2 = 40;
-
+    private static final int START_Y = 35;
     private final int fromX;
     private final int toX;
-
-    private static final int START_Y = 35;
-
     private int correct;
     private int wrong;
 
@@ -58,6 +55,26 @@ public class MidguitarPanel extends JPanel implements NoteMatcherListener {
         setMinimumSize(minimumSize);
         setPreferredSize(minimumSize);
         loadImages();
+    }
+
+    /**
+     * @param howMany
+     * @param startingFrom
+     * @param fromX
+     * @param toX
+     * @param g
+     */
+    private static void drawLines(final int howMany, final int startingFrom, final int fromX, final int toX, final Graphics g) {
+        final Color originalColor = g.getColor();
+        final Stroke originalStroke = ((Graphics2D) g).getStroke();
+        ((Graphics2D) g).setStroke(STROKE_GRID);
+        g.setColor(COLOR_GRID);
+        for (int i = startingFrom, to = startingFrom + howMany; i < to; i++) {
+            final int y = START_Y + i * DISTANCE_BETWEEN_LINES;
+            g.drawLine(fromX, y, toX, y);
+        }
+        ((Graphics2D) g).setStroke(originalStroke);
+        g.setColor(originalColor);
     }
 
     @Override
@@ -126,7 +143,6 @@ public class MidguitarPanel extends JPanel implements NoteMatcherListener {
         drawLines(5, 6, fromX, toX, g);
     }
 
-
     /**
      *
      */
@@ -134,26 +150,6 @@ public class MidguitarPanel extends JPanel implements NoteMatcherListener {
         imgClefG = ImageLoader.loadFromClasspath("/clef_g.png");
         imgWholeNote = ImageLoader.loadFromClasspath("/note_whole.png");
         imgModSharp = ImageLoader.loadFromClasspath("/mod_sharp.png");
-    }
-
-    /**
-     * @param howMany
-     * @param startingFrom
-     * @param fromX
-     * @param toX
-     * @param g
-     */
-    private static void drawLines(final int howMany, final int startingFrom, final int fromX, final int toX, final Graphics g) {
-        final Color originalColor = g.getColor();
-        final Stroke originalStroke = ((Graphics2D) g).getStroke();
-        ((Graphics2D) g).setStroke(STROKE_GRID);
-        g.setColor(COLOR_GRID);
-        for (int i = startingFrom, to = startingFrom + howMany; i < to; i++) {
-            final int y = START_Y + i * DISTANCE_BETWEEN_LINES;
-            g.drawLine(fromX, y, toX, y);
-        }
-        ((Graphics2D) g).setStroke(originalStroke);
-        g.setColor(originalColor);
     }
 
     @Override
