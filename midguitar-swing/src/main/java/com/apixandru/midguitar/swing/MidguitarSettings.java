@@ -7,6 +7,8 @@ import com.apixandru.utils.midi.MidiInput;
 import com.apixandru.utils.midi.javasound.JsMidiDevices;
 import com.apixandru.utils.midi.javasound.JsSynthNoteListener;
 import com.apixandru.utils.swing.components.AxComboBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiUnavailableException;
@@ -34,7 +36,9 @@ import java.util.concurrent.Callable;
  * @author Alexandru-Constantin Bledea
  * @since January 29, 2016
  */
-public class MidguitarSettings extends JPanel {
+class MidguitarSettings extends JPanel {
+
+    private static final Logger log = LoggerFactory.getLogger(MidguitarSettings.class);
 
     //    private final AxComboBox<MidiInput> modelInput = new AxComboBox<>(this, "modelInput");
     private final DefaultComboBoxModel<MidiInput> modelInput = new DefaultComboBoxModel<>();
@@ -46,10 +50,10 @@ public class MidguitarSettings extends JPanel {
     private final JCheckBox chkEnableOutput = new JCheckBox("Enable Output");
 
     private final JCheckBox chkIncludeSharp = new JCheckBox("Include sharp notes");
-    private final List<NoteMatcherListener> listeners = new ArrayList<>();
+    private final transient List<NoteMatcherListener> listeners = new ArrayList<>();
     private final NoteTable noteTable = new NoteTable();
-    private MidiInput input;
-    private NoteMatcher noteMatcher;
+    private transient MidiInput input;
+    private transient NoteMatcher noteMatcher;
 
     MidguitarSettings(final JsMidiDevices deviceProvider) {
 
@@ -70,12 +74,6 @@ public class MidguitarSettings extends JPanel {
         modelInput.addElement(noteTable);
     }
 
-    /**
-     * @param checkbox
-     * @param model
-     * @param deviceMethod
-     * @return
-     */
     private static <T> JPanel createPanel(
             final JCheckBox checkbox,
             final DefaultComboBoxModel<T> model,
@@ -100,23 +98,19 @@ public class MidguitarSettings extends JPanel {
         return jPanel;
     }
 
-    /**
-     * @param model
-     * @param deviceProvider
-     */
     private static <T> void refreshSynthesizers(final DefaultComboBoxModel<T> model, final Callable<List<? extends T>> deviceProvider) {
         try {
             model.removeAllElements();
             deviceProvider.call()
                     .forEach(model::addElement);
         } catch (final Exception e) {
-            e.printStackTrace();
-            error("Cannot reload devices");
+            error("Cannot reload devices", e);
         }
     }
 
-    private static void error(String message) {
+    private static void error(String message, Exception e) {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+        log.error(message, e);
     }
 
     private Component createStart() {
@@ -125,7 +119,7 @@ public class MidguitarSettings extends JPanel {
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
         jPanel.add(Box.createHorizontalGlue());
         final JButton start = new JButton("Start");
-        start.addActionListener(e -> {
+        start.addActionListener(listener -> {
             try {
                 if (null != input) {
                     input.close();
@@ -149,8 +143,8 @@ public class MidguitarSettings extends JPanel {
 
 
                 input.open();
-            } catch (MidiUnavailableException e1) {
-                error("Cannot start device");
+            } catch (MidiUnavailableException e) {
+                error("Cannot start device", e);
             }
         });
         jPanel.add(start);
@@ -181,7 +175,7 @@ public class MidguitarSettings extends JPanel {
         return noteControl;
     }
 
-    public void addNoteMatcherListener(NoteMatcherListener listener) {
+    void addNoteMatcherListener(NoteMatcherListener listener) {
         this.listeners.add(listener);
     }
 }

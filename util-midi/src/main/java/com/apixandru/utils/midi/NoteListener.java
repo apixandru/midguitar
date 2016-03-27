@@ -6,9 +6,6 @@ package com.apixandru.utils.midi;
  */
 public interface NoteListener {
 
-    /**
-     * @param noteNumber the note number
-     */
     void noteStart(int noteNumber);
 
 }

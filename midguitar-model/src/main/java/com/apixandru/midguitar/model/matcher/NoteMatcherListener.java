@@ -6,15 +6,8 @@ package com.apixandru.midguitar.model.matcher;
  */
 public interface NoteMatcherListener {
 
-    /**
-     * @param note the new note
-     */
     void newNote(int note);
 
-    /**
-     * @param expected the expected note
-     * @param actual   the actual note
-     */
     void noteGuessed(int expected, int actual);
 
 }

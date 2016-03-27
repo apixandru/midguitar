@@ -6,9 +6,6 @@ package com.apixandru.utils.midi;
  */
 public interface MidiDevice {
 
-    /**
-     * @return the device name
-     */
     String getName();
 
 }

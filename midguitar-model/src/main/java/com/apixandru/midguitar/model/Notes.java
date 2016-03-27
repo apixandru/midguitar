@@ -38,58 +38,25 @@ public final class Notes {
         BASE_NOTE_NAMES = Collections.unmodifiableList(baseNotes);
     }
 
-    /**
-     *
-     */
     private Notes() {
     }
 
-    /**
-     * @param noteNumber the note number
-     * @return the first note in the octave
-     */
     public static int getFirstNoteInOctave(final int noteNumber) {
         return (getOctave(noteNumber) + 1) * NOTES_IN_OCTAVE;
     }
 
-    /**
-     * @param noteNumber the note number from the midi input
-     * @return the note name with octave
-     */
     public static String getNoteNameWithOctave(final int noteNumber) {
         return ALL_NOTE_NAMES.get(noteNumber);
     }
 
-    /**
-     * @param noteNumber the note number
-     * @return the octave
-     */
     public static int getOctave(final int noteNumber) {
         return noteNumber / NOTES_IN_OCTAVE - 1;
     }
 
-    /**
-     * @param noteNumber the midi note number
-     * @return if the note is sharp
-     */
     public static boolean isSharp(final int noteNumber) {
         return getNoteNameWithOctave(noteNumber).contains("#");
     }
 
-    /**
-     * @param noteNumber the midi note number
-     */
-    private static void ensureNoteInBounds(final int noteNumber) {
-        if (noteNumber < 0 || noteNumber > 127) {
-            throw new IndexOutOfBoundsException("Expected note to be between 0 and 127");
-        }
-    }
-
-    /**
-     * @param from the note from which to start
-     * @param to   the note to which to check
-     * @return the number of full notes in between
-     */
     public static int getFullNotesInBetween(int from, int to) {
         if (from > to) {
             return -getFullNotesInBetween0(to, from);
@@ -97,11 +64,6 @@ public final class Notes {
         return getFullNotesInBetween0(from, to);
     }
 
-    /**
-     * @param from the note from which to start
-     * @param to   the note to which to check
-     * @return the number of full notes in between
-     */
     private static int getFullNotesInBetween0(final int from, final int to) {
         int count = 0;
         char lastNote = getNoteNameWithOctave(from).charAt(0);
@@ -119,10 +81,6 @@ public final class Notes {
         return ALL_NOTE_NAMES;
     }
 
-    /**
-     * @param includeSharp do we include sharp notes
-     * @return all the supported notes
-     */
     public static List<String> getSupportedNoteNames(final boolean includeSharp) {
         final List<String> supportedNoteNames = getSupportedNoteNames();
         if (includeSharp) {
@@ -133,16 +91,10 @@ public final class Notes {
         return Collections.unmodifiableList(newNotes);
     }
 
-    /**
-     * @return all the supported notes
-     */
-    public static List<String> getSupportedNoteNames() {
+    private static List<String> getSupportedNoteNames() {
         return ALL_NOTE_NAMES.subList(SUPPORTED_NOTE_FIRST, SUPPORTED_NOTE_LAST + 1);
     }
 
-    /**
-     * @param noteNames the note names
-     */
     private static void removeSharpNotes(final List<String> noteNames) {
         final Iterator<String> it = noteNames.iterator();
         while (it.hasNext()) {

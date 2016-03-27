@@ -30,7 +30,7 @@ import java.util.Map;
  * @author Alexandru-Constantin Bledea
  * @since February 03, 2016
  */
-public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener {
+class NoteTable extends JPanel implements MidiInput, NoteMatcherListener {
 
     private static final Border ACTIVE_BORDER = new CompoundBorder(
             new LineBorder(Color.LIGHT_GRAY, 1),
@@ -44,7 +44,7 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
     private final Map<String, JLabel> octaveLabels = new HashMap<>();
     private final Map<String, JLabel> noteHeaderLabels = new HashMap<>();
 
-    private final List<NoteListener> listeners = new ArrayList<>();
+    private final transient List<NoteListener> listeners = new ArrayList<>();
 
     private final Map<Integer, Integer> actualCorrectNotes = new HashMap<>();
     private final Map<Integer, Integer> actualWrongNotes = new HashMap<>();
@@ -53,7 +53,7 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
     /**
      *
      */
-    public NoteTable() {
+    NoteTable() {
         this.noteLabels = Collections.unmodifiableList(createLabels());
         setLayout(new GridLayout(0, Notes.BASE_NOTE_NAMES.size() + 1));
         addHeader();
@@ -66,17 +66,10 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
         addMouseMotionListener(listener);
     }
 
-    /**
-     * @param label
-     */
     private static void clearLabel(JLabel label) {
         label.setText(" ");
     }
 
-    /**
-     * @param expected
-     * @return
-     */
     private static int getInt(final int expected, final Map<Integer, Integer> map) {
         Integer integer = map.get(expected);
         if (null == integer) {
@@ -85,10 +78,7 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
         return integer;
     }
 
-    /**
-     * @return
-     */
-    private List<JLabel> createLabels() {
+    private static List<JLabel> createLabels() {
         final List<JLabel> noteLabels = new ArrayList<>(Notes.ALL_NOTE_NAMES.size());
         for (int i = 0, to = Notes.ALL_NOTE_NAMES.size(); i < to; i++) {
             final JLabel noteLabel;
@@ -101,14 +91,10 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
                 noteLabel = null;
             }
             noteLabels.add(noteLabel);
-            ;
         }
         return noteLabels;
     }
 
-    /**
-     *
-     */
     private void addOctavesAndNotes() {
         final int numBasicNotes = Notes.NOTES_IN_OCTAVE;
 
@@ -133,9 +119,6 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
         }
     }
 
-    /**
-     *
-     */
     private void addHeader() {
         add(new JLabel());
         Notes.BASE_NOTE_NAMES.
@@ -148,7 +131,7 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
                 });
     }
 
-    public void configure(final List<Integer> allNotes) {
+    void configure(final List<Integer> allNotes) {
         this.allNotes.clear();
         this.allNotes.addAll(allNotes);
 
@@ -232,8 +215,6 @@ public class NoteTable extends JPanel implements MidiInput, NoteMatcherListener 
         private final LineBorder border = new LineBorder(Color.RED);
 
         private String fullNoteName;
-        private String noteName;
-        private String octave;
 
         private JLabel octaveLabel = new JLabel();
         private JLabel noteLabel = new JLabel();

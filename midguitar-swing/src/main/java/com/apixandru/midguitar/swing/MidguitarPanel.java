@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
  * @author Alexandru-Constantin Bledea
  * @since January 24, 2016
  */
-public class MidguitarPanel extends JPanel implements NoteMatcherListener {
+class MidguitarPanel extends JPanel implements NoteMatcherListener {
 
     private static final int DISTANCE_BETWEEN_LINES = 30;
     private static final int DISTANCE_SEMITONE = DISTANCE_BETWEEN_LINES / 2;
@@ -31,12 +31,10 @@ public class MidguitarPanel extends JPanel implements NoteMatcherListener {
     private static final int START_Y = 35;
     private final int fromX;
     private final int toX;
-    private int correct;
-    private int wrong;
 
-    private BufferedImage imgClefG;
-    private BufferedImage imgWholeNote;
-    private BufferedImage imgModSharp;
+    private transient BufferedImage imgClefG;
+    private transient BufferedImage imgWholeNote;
+    private transient BufferedImage imgModSharp;
 
     private Integer noteExpected;
     private Integer noteActual;
@@ -57,13 +55,6 @@ public class MidguitarPanel extends JPanel implements NoteMatcherListener {
         loadImages();
     }
 
-    /**
-     * @param howMany
-     * @param startingFrom
-     * @param fromX
-     * @param toX
-     * @param g
-     */
     private static void drawLines(final int howMany, final int startingFrom, final int fromX, final int toX, final Graphics g) {
         final Color originalColor = g.getColor();
         final Stroke originalStroke = ((Graphics2D) g).getStroke();
@@ -108,11 +99,6 @@ public class MidguitarPanel extends JPanel implements NoteMatcherListener {
         addNoteSupport(g, note, x);
     }
 
-    /**
-     * @param g
-     * @param note
-     * @param x
-     */
     private void addNoteSupport(final Graphics g, final int note, final int x) {
         final int relationToMainGrid = getRelationToMainGrid(note);
         if (0 < relationToMainGrid) {
@@ -136,16 +122,10 @@ public class MidguitarPanel extends JPanel implements NoteMatcherListener {
         return 0;
     }
 
-    /**
-     * @param g
-     */
     private void drawLines(final Graphics2D g) {
         drawLines(5, 6, fromX, toX, g);
     }
 
-    /**
-     *
-     */
     private void loadImages() {
         imgClefG = ImageLoader.loadFromClasspath("/clef_g.png");
         imgWholeNote = ImageLoader.loadFromClasspath("/note_whole.png");

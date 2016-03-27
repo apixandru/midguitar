@@ -8,24 +8,12 @@ import javax.sound.midi.MidiUnavailableException;
  */
 public interface MidiInput extends MidiDevice {
 
-    /**
-     * @throws MidiUnavailableException
-     */
     void open() throws MidiUnavailableException;
 
-    /**
-     * @throws MidiUnavailableException
-     */
     void close() throws MidiUnavailableException;
 
-    /**
-     * @param listener
-     */
     void addListener(NoteListener listener);
 
-    /**
-     * @param listener
-     */
     void removeListener(NoteListener listener);
 
 }

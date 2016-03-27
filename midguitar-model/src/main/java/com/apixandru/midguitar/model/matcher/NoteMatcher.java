@@ -29,32 +29,20 @@ public final class NoteMatcher implements NoteListener {
         }
     }
 
-    /**
-     *
-     */
     private void newNote() {
         noteExpected = noteGenerator.nextNote();
         listeners.forEach(listener -> listener.newNote(noteExpected));
     }
 
-    /**
-     * @param listener listener
-     */
     public void addNoteMatchListener(final NoteMatcherListener listener) {
         this.listeners.add(listener);
         listener.newNote(noteExpected);
     }
 
-    /**
-     * @param listener listener
-     */
     public void removeNoteMatchListener(final NoteMatcherListener listener) {
         this.listeners.remove(listener);
     }
 
-    /**
-     * @return
-     */
     public List<Integer> getAllNotes() {
         return noteGenerator.getAllNotes();
     }

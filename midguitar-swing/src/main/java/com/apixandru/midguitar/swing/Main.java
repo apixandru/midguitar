@@ -16,6 +16,9 @@ import java.awt.GridBagLayout;
  */
 public final class Main {
 
+    private Main() {
+    }
+
     public static void main(String[] args) throws MidiUnavailableException {
         final JFrame midguitar = new JFrame();
         midguitar.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -46,7 +49,6 @@ public final class Main {
 
         @Override
         public void newNote(final int note) {
-
         }
 
         @Override

@@ -16,17 +16,12 @@ public final class NoteGenerator {
     private final List<Integer> allNotes;
     private final int size;
 
-    /**
-     * @param from
-     * @param to
-     * @param includeSharpNotes
-     */
     public NoteGenerator(final int from, final int to, final boolean includeSharpNotes) {
         this.allNotes = generateNotes(from, to, includeSharpNotes);
         this.size = this.allNotes.size();
     }
 
-    public static List<Integer> generateNotes(final int from, final int to, final boolean includeSharpNotes) {
+    private static List<Integer> generateNotes(final int from, final int to, final boolean includeSharpNotes) {
         final List<Integer> notes = new ArrayList<>();
         for (int i = from; i <= to; i++) {
             if (includeSharpNotes || !Notes.isSharp(i)) {
@@ -36,9 +31,6 @@ public final class NoteGenerator {
         return Collections.unmodifiableList(notes);
     }
 
-    /**
-     * @return
-     */
     public int nextNote() {
         return allNotes.get(random.nextInt(size));
     }

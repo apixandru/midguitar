@@ -13,10 +13,6 @@ final class ImageLoader {
     private ImageLoader() {
     }
 
-    /**
-     * @param path the path
-     * @return the image
-     */
     static BufferedImage loadFromClasspath(final String path) {
         try {
             return ImageIO.read(ImageLoader.class.getResource(path));

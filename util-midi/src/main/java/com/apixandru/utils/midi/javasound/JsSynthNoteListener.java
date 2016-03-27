@@ -16,14 +16,12 @@ public final class JsSynthNoteListener implements NoteListener, AutoCloseable {
     private final Synthesizer synthesizer;
     private final MidiChannel midiChannel;
 
-    /**
-     * @param synthesizer the synthesizer
-     */
     public JsSynthNoteListener(final Synthesizer synthesizer) {
         this.synthesizer = synthesizer;
         this.midiChannel = Arrays.stream(this.synthesizer.getChannels())
                 .filter(Objects::nonNull)
-                .findFirst().get();
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No channel found"));
     }
 
     @Override

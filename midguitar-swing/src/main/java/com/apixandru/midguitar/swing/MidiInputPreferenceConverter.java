@@ -4,12 +4,16 @@ import com.apixandru.utils.midi.MidiException;
 import com.apixandru.utils.midi.MidiInput;
 import com.apixandru.utils.midi.MidiProvider;
 import com.apixandru.utils.swing.components.PreferenceConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Alexandru-Constantin Bledea
  * @since February 07, 2016
  */
-public class MidiInputPreferenceConverter implements PreferenceConverter {
+class MidiInputPreferenceConverter implements PreferenceConverter {
+
+    private static final Logger log = LoggerFactory.getLogger(MidiInputPreferenceConverter.class);
 
     private final MidiProvider midiProvider;
 
@@ -19,7 +23,6 @@ public class MidiInputPreferenceConverter implements PreferenceConverter {
 
     @Override
     public String toPreference(final Object o) {
-        final MidiInput midiInput = (MidiInput) o;
         return ((MidiInput) o).getName();
     }
 
@@ -32,7 +35,7 @@ public class MidiInputPreferenceConverter implements PreferenceConverter {
                 }
             }
         } catch (MidiException ex) {
-            ex.printStackTrace(); // handle this?
+            log.error("Failed to load from preference", ex);
         }
         return null;
     }

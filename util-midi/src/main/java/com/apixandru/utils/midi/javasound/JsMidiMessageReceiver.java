@@ -19,13 +19,9 @@ final class JsMidiMessageReceiver implements Receiver {
     @Override
     public void send(final MidiMessage msg, final long timeStamp) {
         final int noteNumber = ((ShortMessage) msg).getData1();
-        switch (msg.getStatus()) {
-            case ShortMessage.NOTE_ON:
-                listeners.stream()
-                        .forEachOrdered(listener -> listener.noteStart(noteNumber));
-                break;
-            case ShortMessage.NOTE_OFF:
-                break;
+        if (ShortMessage.NOTE_ON == msg.getStatus()) {
+            listeners.stream()
+                    .forEachOrdered(listener -> listener.noteStart(noteNumber));
         }
     }
 
@@ -34,17 +30,11 @@ final class JsMidiMessageReceiver implements Receiver {
         this.listeners.clear();
     }
 
-    /**
-     * @param listener note listener
-     */
-    public void addListener(final NoteListener listener) {
+    void addListener(final NoteListener listener) {
         this.listeners.add(listener);
     }
 
-    /**
-     * @param listener note listener
-     */
-    public void removeListener(final NoteListener listener) {
+    void removeListener(final NoteListener listener) {
         this.listeners.remove(listener);
     }
 

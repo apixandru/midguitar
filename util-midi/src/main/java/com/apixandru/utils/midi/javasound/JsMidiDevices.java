@@ -19,10 +19,6 @@ import java.util.stream.Stream;
  */
 public class JsMidiDevices implements MidiProvider {
 
-    /**
-     * @return the midi devices
-     * @throws MidiUnavailableException
-     */
     private static Stream<MidiDevice> getDevices() throws MidiUnavailableException {
         final List<MidiDevice> result = new ArrayList<>();
         for (final MidiDevice.Info info : MidiSystem.getMidiDeviceInfo()) {
@@ -31,10 +27,6 @@ public class JsMidiDevices implements MidiProvider {
         return result.stream();
     }
 
-    /**
-     * @return the synthesizers
-     * @throws MidiUnavailableException
-     */
     public List<Synthesizer> getSynthesizers() throws MidiUnavailableException {
         return getDevices()
                 .filter(Synthesizer.class::isInstance)
@@ -43,10 +35,7 @@ public class JsMidiDevices implements MidiProvider {
 
     }
 
-    /**
-     * @return the javasound input devices
-     * @throws MidiException
-     */
+    @Override
     public List<MidiInput> getInputDevices() throws MidiException {
         try {
             return getDevices()
