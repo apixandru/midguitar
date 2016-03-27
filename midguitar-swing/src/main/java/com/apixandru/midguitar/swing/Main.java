@@ -55,7 +55,7 @@ public final class Main {
             if (actual == expected) {
                 correct++;
             }
-            frame.setTitle(String.format("%3s/%3s", correct, total));
+            frame.setTitle(String.format("%3s/%3s - %3s%%", correct, total, correct * 100 / total));
         }
 
     }
