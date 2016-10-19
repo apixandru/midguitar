@@ -18,11 +18,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>midguitar-model</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.apixandru.utils</groupId>
-            <artifactId>swing</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -51,17 +46,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-
-        <!--
-            This repository only hold compiled projects from https://github.com/apixandru
-        -->
-        <repository>
-            <id>apixandru-snapshots</id>
-            <url>http://maven.vampirefox.com</url>
-        </repository>
-
-    </repositories>
 
 </project>

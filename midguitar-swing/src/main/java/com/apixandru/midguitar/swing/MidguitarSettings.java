@@ -6,7 +6,6 @@ import com.apixandru.midguitar.model.matcher.NoteMatcherListener;
 import com.apixandru.utils.midi.MidiInput;
 import com.apixandru.utils.midi.javasound.JsMidiDevices;
 import com.apixandru.utils.midi.javasound.JsSynthNoteListener;
-import com.apixandru.utils.swing.components.AxComboBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

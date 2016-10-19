@@ -3,7 +3,6 @@ package com.apixandru.midguitar.swing;
 import com.apixandru.utils.midi.MidiException;
 import com.apixandru.utils.midi.MidiInput;
 import com.apixandru.utils.midi.MidiProvider;
-import com.apixandru.utils.swing.components.PreferenceConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
